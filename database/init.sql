@@ -106,8 +106,7 @@ CREATE TABLE IF NOT EXISTS pdf_documents (
     original_text TEXT,
     chunk_index   INTEGER,
     chunk_text    TEXT,
-    -- pgvector: AI feature 브랜치(feature/vector-search)에서 활성화
-    -- embedding  vector(1536),
+    embedding     vector(1536),        -- pgvector 벡터 임베딩 (feature/vector-search)
     created_at    TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at    TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -115,6 +114,10 @@ CREATE TABLE IF NOT EXISTS pdf_documents (
 CREATE INDEX IF NOT EXISTS idx_pdf_resume_id    ON pdf_documents(resume_id);
 CREATE INDEX IF NOT EXISTS idx_pdf_post_id      ON pdf_documents(post_id);
 CREATE INDEX IF NOT EXISTS idx_pdf_chunk_index  ON pdf_documents(resume_id, chunk_index);
+
+-- pgvector IVFFlat 인덱스 (코사인 유사도)
+CREATE INDEX IF NOT EXISTS idx_pdf_embedding ON pdf_documents
+    USING ivfflat (embedding vector_cosine_ops) WITH (lists = 100);
 
 -- ============================================================
 -- ai_task_logs
