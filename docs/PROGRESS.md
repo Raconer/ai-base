@@ -7,8 +7,8 @@
 
 ## 현재 상태
 
-- **현재 Phase**: Phase 2 (AI 기술 적용) 대기중
-- **현재 작업**: Phase 1 완료 — Phase 2 시작 전
+- **현재 Phase**: Phase 2 (AI 기술 적용) 진행중
+- **현재 작업**: feature/llm-api 완료 → feature/vector-search 시작 전
 - **GitHub**: https://github.com/Raconer/ai-base (public)
 - **브랜치**: main
 
@@ -99,11 +99,11 @@
 
 ---
 
-## Phase 2: Feature 브랜치 — AI 기술 적용 ⬜ 대기
+## Phase 2: Feature 브랜치 — AI 기술 적용 🔄 진행중
 
 | 순서 | 브랜치 | 상태 | 머지 |
 |------|--------|------|------|
-| ① | feature/llm-api | ⬜ | ⬜ |
+| ① | feature/llm-api | ✅ | ⬜ |
 | ② | feature/vector-search | ⬜ | ⬜ |
 | ③ | feature/sentiment-analysis | ⬜ | ⬜ |
 | ④ | feature/pdf-pipeline | ⬜ | ⬜ |
