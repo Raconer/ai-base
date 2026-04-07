@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import api from '../lib/api'
+import { useAuthStore } from '../stores/authStore'
 import Input from '../components/ui/Input'
 import Card from '../components/ui/Card'
+import SemanticSearch from '../components/ai/SemanticSearch'
 
 interface PostSummary {
   id: number
@@ -17,6 +19,8 @@ interface PostSummary {
 export default function Search() {
   const [keyword, setKeyword] = useState('')
   const [submitted, setSubmitted] = useState('')
+  const [mode, setMode] = useState<'keyword' | 'semantic'>('keyword')
+  const { isAuthenticated } = useAuthStore()
 
   const { data, isLoading } = useQuery({
     queryKey: ['search', submitted],
@@ -31,8 +35,37 @@ export default function Search() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white">검색</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">검색</h1>
+        {isAuthenticated() && (
+          <div className="flex gap-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+            <button
+              onClick={() => setMode('keyword')}
+              className={`px-3 py-1 rounded text-sm transition ${
+                mode === 'keyword'
+                  ? 'bg-white dark:bg-gray-700 shadow text-gray-900 dark:text-white'
+                  : 'text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              키워드
+            </button>
+            <button
+              onClick={() => setMode('semantic')}
+              className={`px-3 py-1 rounded text-sm transition ${
+                mode === 'semantic'
+                  ? 'bg-white dark:bg-gray-700 shadow text-gray-900 dark:text-white'
+                  : 'text-gray-500 dark:text-gray-400'
+              }`}
+            >
+              ✨ 시맨틱
+            </button>
+          </div>
+        )}
+      </div>
 
+      {mode === 'semantic' ? (
+        <SemanticSearch />
+      ) : (
       <form
         onSubmit={(e) => { e.preventDefault(); setSubmitted(keyword) }}
         className="flex gap-3"
@@ -80,6 +113,7 @@ export default function Search() {
           </Card>
         ))}
       </div>
+      )}
     </div>
   )
 }
