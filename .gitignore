@@ -1,0 +1,65 @@
+# ===== Java / Spring Boot =====
+*.class
+*.jar
+*.war
+*.ear
+*.log
+target/
+build/
+out/
+.gradle/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Spring Boot
+*.pid
+application-local.yml
+application-local.properties
+
+# ===== Node / React =====
+node_modules/
+dist/
+.vite/
+*.local
+
+# ===== IDE =====
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# ===== OS =====
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# ===== Environment =====
+.env
+.env.local
+.env.*.local
+*.env
+
+# ===== Docker =====
+docker/data/
+docker/logs/
+
+# ===== Secrets =====
+*.pem
+*.key
+*.p12
+credentials.json
+
+# ===== Test =====
+coverage/
+*.test.js.snap
+htmlcov/
+
+# ===== Generated =====
+generated/
+*.generated.*
