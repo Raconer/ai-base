@@ -4,6 +4,7 @@ import api from '../lib/api'
 import { useAuthStore } from '../stores/authStore'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
+import SentimentBadge from '../components/ai/SentimentBadge'
 
 interface PostResponse {
   id: number
@@ -61,6 +62,7 @@ export default function PostDetail() {
               )}
               <span>👁 {post.viewCount}</span>
               <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+              <SentimentBadge postId={post.id} score={post.sentimentScore} />
             </div>
             {isOwner && (
               <div className="flex gap-2">
