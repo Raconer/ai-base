@@ -8,7 +8,7 @@
 ## 현재 상태
 
 - **현재 Phase**: Phase 2 (AI 기술 적용) 진행중
-- **현재 작업**: feature/pdf-pipeline 완료 → feature/ensemble-prediction 시작 전
+- **현재 작업**: feature/ensemble-prediction 완료 → feature/adaptive-feedback 시작 전
 - **GitHub**: https://github.com/Raconer/ai-base (public)
 - **브랜치**: main
 
@@ -107,7 +107,7 @@
 | ② | feature/vector-search | ✅ | ⬜ |
 | ③ | feature/sentiment-analysis | ✅ | ⬜ |
 | ④ | feature/pdf-pipeline | ✅ | ⬜ |
-| ⑤ | feature/ensemble-prediction | ⬜ | ⬜ |
+| ⑤ | feature/ensemble-prediction | ✅ | ⬜ |
 | ⑥ | feature/adaptive-feedback | ⬜ | ⬜ |
 | ⑦ | feature/multi-agent | ⬜ | ⬜ |
 | ⑧ | feature/timeseries | ⬜ | ⬜ |
