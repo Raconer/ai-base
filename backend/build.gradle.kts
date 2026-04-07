@@ -59,6 +59,9 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.6.3")
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 
+    // Anthropic Java SDK (LLM API)
+    implementation("com.anthropic:anthropic-java:0.8.0")
+
     // Lombok
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")

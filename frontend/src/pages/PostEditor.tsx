@@ -5,6 +5,7 @@ import api from '../lib/api'
 import Card from '../components/ui/Card'
 import Input from '../components/ui/Input'
 import Button from '../components/ui/Button'
+import AiWriter from '../components/ai/AiWriter'
 
 export default function PostEditor() {
   const { id } = useParams<{ id: string }>()
@@ -98,7 +99,10 @@ export default function PostEditor() {
             placeholder="spring, java, ai"
           />
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">내용</label>
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">내용</label>
+              <AiWriter text={content} onApply={(corrected) => setContent(corrected)} />
+            </div>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
