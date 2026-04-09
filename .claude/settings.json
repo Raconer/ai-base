@@ -1,0 +1,46 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "코드 작업이 포함된 경우에만: 생성자 주입, 테스트 필수, GlobalExceptionHandler 경유. 아니면 통과."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/pre-edit.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/post-edit.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "prompt",
+            "prompt": "코드 작성/수정이 있었다면: 1) 테스트 없는 public 메서드 2) 예외처리 누락 3) 트랜잭션 경계 불명확 — 하나라도 해당되면 완료 거부. 코드 작업 없으면 통과."
+          }
+        ]
+      }
+    ]
+  }
+}
