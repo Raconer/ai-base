@@ -1,10 +1,18 @@
 #!/bin/bash
 INPUT=$(cat)
 CONTENT=$(echo "$INPUT" | jq -r '.tool_input.content // empty')
+FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
-# @Autowired 감지 → 저장 차단
-if echo "$CONTENT" | grep -q "@Autowired"; then
+# 테스트 파일은 Spring 테스트 표준 주입 허용 (@WebMvcTest 등)
+IS_TEST=false
+if echo "$FILE_PATH" | grep -q "src/test"; then
+  IS_TEST=true
+fi
+
+# 프로덕션 코드에서만 필드 주입 차단
+AUTOWIRED_ANNOTATION="@Autowired"
+if [ "$IS_TEST" = "false" ] && echo "$CONTENT" | grep -qF "$AUTOWIRED_ANNOTATION"; then
   echo '{"decision":"block","reason":"@Autowired 금지. 생성자 주입 사용하라"}'
   exit 0
 fi
@@ -21,9 +29,9 @@ if echo "$CONTENT" | grep -q "System.out.println"; then
   exit 0
 fi
 
-# force push 차단
-if echo "$COMMAND" | grep -q "git push --force"; then
-  echo '{"decision":"block","reason":"force push 금지"}'
+# force push 차단 (--force-with-lease는 허용)
+if echo "$COMMAND" | grep -qE "git push --force[^-]|git push --force$"; then
+  echo '{"decision":"block","reason":"force push 금지. --force-with-lease 사용하라"}'
   exit 0
 fi
 
