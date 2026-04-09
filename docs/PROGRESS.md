@@ -108,7 +108,7 @@
 | ③ | feature/sentiment-analysis | ✅ | ⬜ |
 | ④ | feature/pdf-pipeline | ✅ | ⬜ |
 | ⑤ | feature/ensemble-prediction | ✅ | ⬜ |
-| ⑥ | feature/adaptive-feedback | ⬜ | ⬜ |
+| ⑥ | feature/adaptive-feedback | ✅ | ✅ |
 | ⑦ | feature/multi-agent | ⬜ | ⬜ |
 | ⑧ | feature/timeseries | ⬜ | ⬜ |
 | ⑨ | feature/claude-md-hierarchy | ⬜ | ⬜ |

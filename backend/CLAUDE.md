@@ -89,6 +89,17 @@ http://localhost:8080/swagger-ui/index.html
 
 ---
 
+## 모델 선택 가이드 (토큰 절약)
+| 작업 | 권장 모델 |
+|------|-----------|
+| 단순 CRUD 생성, 타입 수정 | haiku |
+| 로직 구현, 리팩토링, 버그 수정 | sonnet |
+| 아키텍처 설계, 복잡한 AI 알고리즘 | opus |
+
+Claude Code에서 `--model haiku` / `--model sonnet` / `--model opus` 플래그로 지정.
+
+---
+
 ## AI 기술 추가 가이드 (feature 브랜치)
 `com.aibase.ai` 패키지 아래에 기술별 폴더 생성:
 ```
