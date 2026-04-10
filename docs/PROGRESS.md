@@ -1,6 +1,6 @@
 # AI Base - 진행 현황
 
-> 마지막 업데이트: 2026-04-07 (Phase 1 완료)
+> 마지막 업데이트: 2026-04-09 (feature/timeseries 머지 완료)
 > 세션이 끊겼을 경우 이 문서를 읽고 이어서 작업하세요.
 
 ---
@@ -103,14 +103,14 @@
 
 | 순서 | 브랜치 | 상태 | 머지 |
 |------|--------|------|------|
-| ① | feature/llm-api | ✅ | ⬜ |
-| ② | feature/vector-search | ✅ | ⬜ |
-| ③ | feature/sentiment-analysis | ✅ | ⬜ |
-| ④ | feature/pdf-pipeline | ✅ | ⬜ |
-| ⑤ | feature/ensemble-prediction | ✅ | ⬜ |
+| ① | feature/llm-api | ✅ | ✅ |
+| ② | feature/vector-search | ✅ | ✅ |
+| ③ | feature/sentiment-analysis | ✅ | ✅ |
+| ④ | feature/pdf-pipeline | ✅ | ✅ |
+| ⑤ | feature/ensemble-prediction | ✅ | ✅ |
 | ⑥ | feature/adaptive-feedback | ✅ | ✅ |
-| ⑦ | feature/multi-agent | ✅ | ⬜ |
-| ⑧ | feature/timeseries | ✅ | ⬜ |
+| ⑦ | feature/multi-agent | ✅ | ✅ |
+| ⑧ | feature/timeseries | ✅ | ✅ |
 | ⑨ | feature/claude-md-hierarchy | ⬜ | ⬜ |
 | ⑩ | feature/harness-orchestration | ⬜ | ⬜ |
 | ⑪ | feature/token-optimization | ⬜ | ⬜ |
