@@ -13,7 +13,7 @@ AI 기술 feature 브랜치 개발 시 이 가이드를 따른다.
 ② Developer →  코드 구현 + PROGRESS.md 업데이트
 ③ Reviewer  →  코드 리뷰
 ④ QA        →  테스트 시나리오 작성 및 검증
-⑤ Git       →  커밋 + 브랜치 푸시 + PR
+⑤ Git       →  커밋 + 브랜치 머지
 ```
 
 ---
@@ -26,6 +26,33 @@ docs/PROGRESS.md와 docs/PROJECT_PLAN.md를 읽고
 현재 🔄 Phase의 ⬜ 항목부터 이어서 진행해줘.
 작업 완료 시 PROGRESS.md를 ✅로 업데이트해줘.
 ```
+
+---
+
+## 하네스 자동 관리
+
+같은 실수가 **2번 이상** 반복되면 `harness-builder` 에이전트를 호출하여
+`.claude/settings.json`에 Hook을 자동으로 추가한다.
+
+### Hook 종류
+
+| Hook | 트리거 | 역할 |
+|------|--------|------|
+| `UserPromptSubmit` | 사용자 입력 시 | 코드 작업 시 컨벤션 리마인더 |
+| `PreToolUse (Edit\|Write)` | 파일 편집 전 | 금지 패턴 차단 |
+| `PostToolUse (Edit\|Write)` | 파일 편집 후 | 후처리 |
+| `Stop` | 세션 종료 전 | PROGRESS.md 업데이트 확인 |
+
+### 현재 차단 패턴 (`pre-edit.sh`)
+
+| 패턴 | 대상 | 대안 |
+|------|------|------|
+| `@Autowired` | 프로덕션 Java | 생성자 주입 |
+| `import lombok` | Java | Java record / 수동 구현 |
+| `System.out.println` | Java | SLF4J Logger |
+| `git push --force` | Bash | `--force-with-lease` |
+
+> `.md`, `.yml`, `.json`, `.sh` 파일은 검사 제외.
 
 ---
 
@@ -43,9 +70,9 @@ docs/PROGRESS.md와 docs/PROJECT_PLAN.md를 읽고
 - 대형 결과물은 파일에 저장 후 경로만 참조
 
 ### Spec-as-Contract
-- planner가 `spec.md` 작성
-- developer는 spec만 읽고 구현 (전체 대화 컨텍스트 불필요)
-- reviewer는 spec + 코드만 읽고 리뷰
+- Planner가 `spec.md` 작성
+- Developer는 spec만 읽고 구현 (전체 대화 컨텍스트 불필요)
+- Reviewer는 spec + 코드만 읽고 리뷰
 
 ### max-turns 제한
 - 반복적인 수정 루프 방지
@@ -57,6 +84,7 @@ docs/PROGRESS.md와 docs/PROJECT_PLAN.md를 읽고
 
 ```bash
 # 브랜치 생성
+git checkout main
 git checkout -b feature/llm-api
 
 # 개발 (planner → developer → reviewer → qa)
@@ -68,9 +96,9 @@ git checkout -b feature/llm-api
 git add .
 git commit -m "feat: LLM API 연동 구현"
 
-# PR 생성
-git push origin feature/llm-api
-gh pr create --title "feat: LLM API 통합" --body "..."
+# main 머지
+git checkout main
+git merge feature/llm-api --no-ff -m "Merge feature/llm-api: LLM API 통합"
 ```
 
 ---
@@ -84,15 +112,14 @@ gh pr create --title "feat: LLM API 통합" --body "..."
     └── ai/*/README.md  ← AI 기술별 설명 (각 feature 브랜치)
 ```
 
-Claude Code는 현재 디렉토리부터 상위로 CLAUDE.md를 자동 로드.
-모듈별 CLAUDE.md가 가장 높은 우선순위를 가짐.
+상세 내용: `.claude/HIERARCHY.md` 참고.
 
 ---
 
-## Pre-Write 훅 (권고)
+## Hook exit 코드
 
-새 파일 작성 전 체크리스트:
-1. 기존 유사 파일이 있는지 확인
-2. 관련 CLAUDE.md 컨벤션 확인
-3. 필요한 import/dependency 확인
-4. PROGRESS.md 해당 항목 확인
+| exit 코드 | 의미 |
+|-----------|------|
+| `0` | 통과 |
+| `1` | 에러 — Claude 재수정 |
+| `2` | 차단 — 실행 불가 |
