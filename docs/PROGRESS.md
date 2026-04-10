@@ -1,16 +1,16 @@
 # AI Base - 진행 현황
 
-> 마지막 업데이트: 2026-04-10 (Phase 3 완료)
+> 마지막 업데이트: 2026-04-11 (hotfix 완료)
 > 세션이 끊겼을 경우 이 문서를 읽고 이어서 작업하세요.
 
 ---
 
 ## 현재 상태
 
-- **현재 Phase**: Phase 3 완료 ✅
+- **현재 Phase**: Phase 3 완료 + hotfix ✅
 - **현재 작업**: 전체 완료
 - **GitHub**: https://github.com/Raconer/ai-base (public)
-- **브랜치**: main
+- **브랜치**: main (feature/hotfix-compatibility 머지 완료)
 
 ---
 
@@ -124,6 +124,20 @@
 | 메인 README.md 최종 업데이트 | ✅ | 삭제된 agents/, harness.md 참조 수정, .claude/ 경로로 교체 |
 | 각 AI 폴더 README.md 검수 | ✅ | 8개 모듈 전부 존재 확인 |
 | ERD + 관계도 최종 검수 | ✅ | README.md에 최신 ERD + AI 관계도 포함 |
+
+---
+
+## Hotfix: SDK 호환성 수정 ✅ 완료 (2026-04-11)
+
+| 브랜치 | 상태 | 내용 |
+|--------|------|------|
+| feature/hotfix-compatibility | ✅ 머지 | Anthropic SDK TextBlock API 변경, Docker 포트 충돌 해결 |
+
+### 변경 내역
+- **LlmService**: `TextBlock` 직접 캐스팅 → `isText()/asText()` API (SDK 호환)
+- **AiBaseApplication**: `@EnableJpaRepositories` 추가
+- **docker-compose.yml**: 포트 충돌 방지 (PG: 5435, Redis: 6383, BE: 8082, FE: 3007)
+- **FE 컴포넌트**: JSX 구조 수정, 타입 정합성 개선
 
 ---
 
