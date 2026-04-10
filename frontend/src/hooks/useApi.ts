@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import api from '../lib/api'
-import { AxiosRequestConfig } from 'axios'
+import { type AxiosRequestConfig } from 'axios'
 
 interface ApiState<T> {
   data: T | null
