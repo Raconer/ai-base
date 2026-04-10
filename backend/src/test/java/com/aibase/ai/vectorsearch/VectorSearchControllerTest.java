@@ -2,6 +2,7 @@ package com.aibase.ai.vectorsearch;
 
 import com.aibase.ai.vectorsearch.dto.SemanticSearchRequest;
 import com.aibase.ai.vectorsearch.dto.SemanticSearchResult;
+import com.aibase.common.security.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,9 @@ class VectorSearchControllerTest {
 
     @MockBean
     private VectorSearchService vectorSearchService;
+
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
 
     @Test
     @WithMockUser
@@ -77,6 +81,6 @@ class VectorSearchControllerTest {
         mockMvc.perform(post("/api/ai/vector/index/1")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data").value("문서가 인덱싱되었습니다"));
+                .andExpect(jsonPath("$.success").value(true));
     }
 }
