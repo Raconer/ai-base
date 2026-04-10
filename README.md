@@ -114,9 +114,9 @@
 
 | # | 주제 | 설명 | README | 브랜치 |
 |---|------|------|--------|--------|
-| 9 | **CLAUDE.md 계층 구조** | 글로벌/로컬/모듈별 MD 파일 설계 | [README](docs/claude-md-hierarchy.md) | `feature/claude-md-hierarchy` |
-| 10 | **하네스 오케스트레이션** | 멀티 에이전트 파이프라인 설계 | [README](docs/harness-orchestration.md) | `feature/harness-orchestration` |
-| 11 | **토큰 절약 전략** | 모델 티어링, 파일 기반 통신, Pre-Write 훅 | [README](docs/token-optimization.md) | `feature/token-optimization` |
+| 9 | **CLAUDE.md 계층 구조** | 글로벌/로컬/모듈별 MD 파일 설계 | [README](.claude/HIERARCHY.md) | `feature/claude-md-hierarchy` |
+| 10 | **하네스 오케스트레이션** | 멀티 에이전트 파이프라인 설계 | [README](.claude/agents/) | `feature/harness-orchestration` |
+| 11 | **토큰 절약 전략** | 모델 티어링, 파일 기반 통신, Pre-Write 훅 | [README](.claude/TOKEN_OPTIMIZATION.md) | `feature/token-optimization` |
 
 ---
 
@@ -336,14 +336,15 @@ ai_base/
 ├── docker/
 │   └── docker-compose.yml       ← PG + Redis + BE + FE
 │
-├── agents/                      ← 멀티 에이전트 정의
-│   ├── README.md
-│   ├── planner.md
-│   ├── developer.md
-│   ├── reviewer.md
-│   └── qa.md
-│
-└── harness.md                   ← 하네스 오케스트레이션
+└── .claude/                     ← Claude Code 방법론
+    ├── HIERARCHY.md             ← CLAUDE.md 계층 구조
+    ├── TOKEN_OPTIMIZATION.md   ← 토큰 절약 전략
+    ├── agents/                  ← 전문 에이전트 정의
+    │   ├── code-reviewer.md
+    │   ├── harness-builder.md
+    │   └── test-writer.md
+    ├── hooks/                   ← Pre/Post 편집 훅
+    └── settings.json            ← 훅 설정 + 모델 티어링
 ```
 
 ---
@@ -370,7 +371,7 @@ ai_base/
 | 순서 | 브랜치 | 내용 | 핵심 파일 |
 |------|--------|------|----------|
 | 9 | `feature/claude-md-hierarchy` | CLAUDE.md 계층 구조 | CLAUDE.md x3+, .claude/ |
-| 10 | `feature/harness-orchestration` | 하네스 오케스트레이션 | agents/*.md, harness.md |
+| 10 | `feature/harness-orchestration` | 하네스 오케스트레이션 | .claude/agents/*.md |
 | 11 | `feature/token-optimization` | 토큰 절약 전략 | .claude/settings.json |
 
 ---
