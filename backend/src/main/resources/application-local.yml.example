@@ -1,0 +1,8 @@
+# 로컬 개발 프로파일 — docker-compose 포트 매핑에 맞춘 설정
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/aibase
+  data:
+    redis:
+      host: localhost
+      port: 6383
