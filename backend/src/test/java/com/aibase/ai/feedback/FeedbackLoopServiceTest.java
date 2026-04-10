@@ -4,6 +4,7 @@ import com.aibase.ai.feedback.dto.FeedbackRequest;
 import com.aibase.ai.feedback.dto.FeedbackResponse;
 import com.anthropic.client.AnthropicClient;
 import com.anthropic.services.blocking.MessageService;
+import com.anthropic.models.messages.ContentBlock;
 import com.anthropic.models.messages.Message;
 import com.anthropic.models.messages.MessageCreateParams;
 import com.anthropic.models.messages.TextBlock;
@@ -32,7 +33,7 @@ class FeedbackLoopServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new FeedbackLoopService(anthropicClient, new ObjectMapper());
+        service = new FeedbackLoopService(anthropicClient, new ObjectMapper(), "claude-haiku-4-5-20251001");
     }
 
     @Test
@@ -43,8 +44,9 @@ class FeedbackLoopServiceTest {
         given(anthropicClient.messages()).willReturn(messageService);
 
         String evalJson = "{\"score\": 85, \"suggestions\": [\"좋은 글입니다\"]}";
+        Message evalMsg = mockMessage(evalJson);
         given(messageService.create(any(MessageCreateParams.class)))
-                .willReturn(mockMessage(evalJson));
+                .willReturn(evalMsg);
 
         FeedbackRequest request = new FeedbackRequest("잘 작성된 글입니다.", 3);
 
@@ -67,11 +69,15 @@ class FeedbackLoopServiceTest {
         String evalJson = "{\"score\": 50, \"suggestions\": [\"내용 보강\", \"문장 다듬기\"]}";
         String improvedText = "개선된 텍스트";
 
+        Message evalMsg1 = mockMessage(evalJson);
+        Message improveMsg1 = mockMessage(improvedText);
+        Message evalMsg2 = mockMessage(evalJson);
+        Message improveMsg2 = mockMessage(improvedText);
         given(messageService.create(any(MessageCreateParams.class)))
-                .willReturn(mockMessage(evalJson))   // 1회차 평가
-                .willReturn(mockMessage(improvedText)) // 1회차 개선
-                .willReturn(mockMessage(evalJson))   // 2회차 평가
-                .willReturn(mockMessage(improvedText)); // 2회차 개선
+                .willReturn(evalMsg1)    // 1회차 평가
+                .willReturn(improveMsg1) // 1회차 개선
+                .willReturn(evalMsg2)    // 2회차 평가
+                .willReturn(improveMsg2); // 2회차 개선
 
         FeedbackRequest request = new FeedbackRequest("부족한 글입니다.", 2);
 
@@ -91,9 +97,11 @@ class FeedbackLoopServiceTest {
         MessageService messageService = mock(MessageService.class);
         given(anthropicClient.messages()).willReturn(messageService);
 
+        Message invalidMsg = mockMessage("invalid json");
+        Message improvedMsg = mockMessage("개선된 텍스트");
         given(messageService.create(any(MessageCreateParams.class)))
-                .willReturn(mockMessage("invalid json"))   // 평가 파싱 실패
-                .willReturn(mockMessage("개선된 텍스트"));  // 개선
+                .willReturn(invalidMsg)    // 평가 파싱 실패
+                .willReturn(improvedMsg);  // 개선
 
         FeedbackRequest request = new FeedbackRequest("테스트 글", 1);
 
@@ -106,8 +114,11 @@ class FeedbackLoopServiceTest {
     }
 
     private Message mockMessage(String text) {
-        TextBlock block = mock(TextBlock.class);
-        given(block.text()).willReturn(text);
+        TextBlock textBlock = new TextBlock.Builder()
+                .text(text)
+                .citations(List.of())
+                .build();
+        ContentBlock block = ContentBlock.Companion.ofText(textBlock);
         Message message = mock(Message.class);
         given(message.content()).willReturn(List.of(block));
         return message;

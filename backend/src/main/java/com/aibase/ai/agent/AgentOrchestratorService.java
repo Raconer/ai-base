@@ -37,13 +37,15 @@ public class AgentOrchestratorService {
 
     private final AnthropicClient anthropicClient;
     private final ObjectMapper objectMapper;
+    private final String model;
 
-    @Value("${anthropic.model:claude-haiku-4-5-20251001}")
-    private String model;
-
-    public AgentOrchestratorService(AnthropicClient anthropicClient, ObjectMapper objectMapper) {
+    public AgentOrchestratorService(
+            AnthropicClient anthropicClient,
+            ObjectMapper objectMapper,
+            @Value("${anthropic.model:claude-haiku-4-5-20251001}") String model) {
         this.anthropicClient = anthropicClient;
         this.objectMapper = objectMapper;
+        this.model = model;
     }
 
     public AgentResponse classify(AgentRequest request) {
