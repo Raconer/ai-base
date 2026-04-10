@@ -1,16 +1,16 @@
 # AI Base - 진행 현황
 
-> 마지막 업데이트: 2026-04-11 (hotfix 완료)
+> 마지막 업데이트: 2026-04-11 (domain tests + CI/CD 진행 중)
 > 세션이 끊겼을 경우 이 문서를 읽고 이어서 작업하세요.
 
 ---
 
 ## 현재 상태
 
-- **현재 Phase**: Phase 3 완료 + hotfix ✅
-- **현재 작업**: 전체 완료
+- **현재 Phase**: 추가 작업 진행 중
+- **현재 작업**: 3순위 GitHub Actions CI/CD 파이프라인 (feature/github-actions)
 - **GitHub**: https://github.com/Raconer/ai-base (public)
-- **브랜치**: main (feature/hotfix-compatibility 머지 완료)
+- **브랜치**: main (feature/domain-tests 머지 완료)
 
 ---
 
@@ -124,6 +124,24 @@
 | 메인 README.md 최종 업데이트 | ✅ | 삭제된 agents/, harness.md 참조 수정, .claude/ 경로로 교체 |
 | 각 AI 폴더 README.md 검수 | ✅ | 8개 모듈 전부 존재 확인 |
 | ERD + 관계도 최종 검수 | ✅ | README.md에 최신 ERD + AI 관계도 포함 |
+
+---
+
+## 추가 작업: 테스트 + CI/CD + 하네스 (2026-04-11)
+
+| 브랜치 | 상태 | 내용 |
+|--------|------|------|
+| feature/token-optimization-v2 | ✅ 머지 | pre-bash Hook + Stop Hook + 모델 티어링 |
+| feature/docker-verify | ✅ 머지 | BE 기동 오류 수정 + 로컬 환경 개선 |
+| feature/domain-tests | ✅ 머지 | 도메인 테스트 52개 추가 + AI 서비스 테스트 안정화 |
+| feature/github-actions | 🔄 진행 중 | GitHub Actions CI/CD 파이프라인 |
+| feature/harness-upgrade | ⬜ 예정 | .claude/ Skills/Agents 내용 개선 |
+
+### feature/domain-tests 주요 변경
+- AuthControllerTest, PostControllerTest, ResumeControllerTest, PdfControllerTest 신규
+- JpaAuditingConfig 분리 (@WebMvcTest + @EnableJpaAuditing 충돌 해소)
+- AgentOrchestratorService, FeedbackLoopService: @Value → 생성자 파라미터 (null 버그 수정)
+- AI 서비스 테스트 mockMessage() 호출 패턴 수정 (UnfinishedStubbingException 해소)
 
 ---
 
