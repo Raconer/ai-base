@@ -31,16 +31,6 @@
           }
         ]
       }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/stop-check.sh"
-          }
-        ]
-      }
     ]
   },
   "model": "claude-sonnet-4-6",
