@@ -91,7 +91,7 @@ public class PostService {
 
     public PageResponse<PostSummaryResponse> getMyPosts(Long userId, Pageable pageable) {
         Page<Post> page = postRepository.findByUserId(userId, pageable);
-        return PageResponse.of(page.map(PostSummaryResponse::from));
+        return PageResponse.from(page.map(PostSummaryResponse::from));
     }
 
     private Post findPostById(Long id) {

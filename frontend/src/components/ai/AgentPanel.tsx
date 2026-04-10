@@ -65,7 +65,7 @@ export default function AgentPanel({ text, onApply }: AgentPanelProps) {
         </Button>
         {mutation.isPending && (
           <div className="space-y-1">
-            {['분류 에이전트', '태그 에이전트', '요약 에이전트'].map((name, i) => (
+            {['분류 에이전트', '태그 에이전트', '요약 에이전트'].map((name) => (
               <div key={name} className="flex items-center gap-2 text-sm text-gray-400">
                 <span className="animate-pulse">⏳</span>
                 <span>{name} 실행 중...</span>

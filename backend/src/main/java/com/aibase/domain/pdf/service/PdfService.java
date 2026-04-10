@@ -10,6 +10,7 @@ import com.aibase.domain.post.repository.PostRepository;
 import com.aibase.domain.resume.entity.Resume;
 import com.aibase.domain.resume.repository.ResumeRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.springframework.http.HttpStatus;
@@ -107,7 +108,7 @@ public class PdfService {
     }
 
     private String extractText(MultipartFile file) {
-        try (PDDocument document = PDDocument.load(file.getInputStream())) {
+        try (PDDocument document = Loader.loadPDF(file.getBytes())) {
             PDFTextStripper stripper = new PDFTextStripper();
             return stripper.getText(document);
         } catch (IOException e) {

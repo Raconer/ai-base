@@ -8,7 +8,7 @@ import com.anthropic.client.AnthropicClient;
 import com.anthropic.models.messages.Message;
 import com.anthropic.models.messages.MessageCreateParams;
 import com.anthropic.models.messages.Model;
-import com.anthropic.models.messages.TextBlock;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -115,8 +115,8 @@ public class FeedbackLoopService {
                     .build();
             Message message = anthropicClient.messages().create(params);
             return message.content().stream()
-                    .filter(b -> b instanceof TextBlock)
-                    .map(b -> ((TextBlock) b).text())
+                    .filter(b -> b.isText())
+                    .map(b -> b.asText().text())
                     .findFirst().orElse("");
         } catch (Exception e) {
             throw new BusinessException("피드백 루프 AI 호출 실패: " + e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);

@@ -8,7 +8,7 @@ import com.anthropic.client.AnthropicClient;
 import com.anthropic.models.messages.Message;
 import com.anthropic.models.messages.MessageCreateParams;
 import com.anthropic.models.messages.Model;
-import com.anthropic.models.messages.TextBlock;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -102,8 +102,8 @@ public class LlmService {
             Message message = anthropicClient.messages().create(params);
 
             String resultText = message.content().stream()
-                    .filter(block -> block instanceof TextBlock)
-                    .map(block -> ((TextBlock) block).text())
+                    .filter(block -> block.isText())
+                    .map(block -> block.asText().text())
                     .findFirst()
                     .orElse("");
 
