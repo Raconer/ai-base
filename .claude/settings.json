@@ -1,15 +1,5 @@
 {
   "hooks": {
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "prompt",
-            "prompt": "코드 작업이 포함된 경우에만: 생성자 주입, 테스트 필수, GlobalExceptionHandler 경유. 아니면 통과."
-          }
-        ]
-      }
-    ],
     "PreToolUse": [
       {
         "matcher": "Edit|Write",
@@ -17,6 +7,15 @@
           {
             "type": "command",
             "command": ".claude/hooks/pre-edit.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/pre-bash.sh"
           }
         ]
       }
@@ -31,20 +30,32 @@
           }
         ]
       }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/stop-check.sh"
+          }
+        ]
+      }
     ]
   },
   "model": "claude-sonnet-4-6",
   "tokenOptimization": {
     "description": "토큰 절약 전략 — 상세 내용: .claude/TOKEN_OPTIMIZATION.md",
     "modelTiering": {
-      "haiku": "단순 CRUD, 타입 수정, 파일 이동",
-      "sonnet": "로직 구현, 리팩토링, 버그 수정 (기본값)",
-      "opus": "아키텍처 설계, 복잡한 AI 알고리즘"
+      "haiku": "단순 CRUD, 타입 수정, 파일 이동, 보일러플레이트",
+      "sonnet": "로직 구현, 리팩토링, 버그 수정, 테스트 작성 (기본값)",
+      "opus": "아키텍처 설계, 복잡한 AI 알고리즘, 시스템 설계"
     },
     "contextControl": [
       "PROGRESS.md로 세션 복구 (전체 재설명 불필요)",
       "Spec-as-Contract: spec.md 파일로 에이전트 간 통신",
-      "pre-edit.sh로 잘못된 코드 사전 차단 (재작업 방지)"
+      "pre-edit.sh로 잘못된 코드 사전 차단 (재작업 방지)",
+      "Subagent로 독립 작업 위임 (메인 컨텍스트 보호)",
+      "파일 경로 참조 방식으로 대형 컨텐츠 전달"
     ]
   }
 }

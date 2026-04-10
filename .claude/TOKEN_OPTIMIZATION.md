@@ -4,22 +4,27 @@
 
 ---
 
-## 1. 모델 티어링
+## 1. 모델 티어링 (Model Tiering)
 
 작업 복잡도에 따라 적절한 모델을 선택한다.
 
-| 작업 유형 | 권장 모델 | 이유 |
+| 작업 유형 | 권장 모델 | 비용 |
 |---------|---------|------|
-| 단순 CRUD 생성, 타입 수정, 파일 이동 | `claude-haiku-4-5` | 빠르고 저렴 |
-| 로직 구현, 리팩토링, 버그 수정 | `claude-sonnet-4-6` | 균형 |
-| 아키텍처 설계, 복잡한 AI 알고리즘 | `claude-opus-4-6` | 최고 품질 |
+| 단순 CRUD, 타입 수정, 파일 이동, 보일러플레이트 | `claude-haiku-4-5` | 가장 저렴 |
+| 로직 구현, 리팩토링, 버그 수정, 테스트 작성 | `claude-sonnet-4-6` | 균형 (기본값) |
+| 아키텍처 설계, 복잡한 AI 알고리즘, 시스템 설계 | `claude-opus-4-6` | 최고 품질 |
 
-```bash
-# Claude Code에서 모델 지정
-claude --model haiku   # 단순 작업
-claude --model sonnet  # 일반 작업 (기본값)
-claude --model opus    # 복잡한 설계
-```
+### 이 프로젝트 작업별 모델 선택 기준
+
+| 작업 | 모델 | 이유 |
+|------|------|------|
+| Entity/DTO 추가 | haiku | 반복적인 패턴, 단순 구조 |
+| Repository 작성 | haiku | Spring Data JPA 보일러플레이트 |
+| Service 비즈니스 로직 | sonnet | 트랜잭션, 예외처리 판단 필요 |
+| Controller + 테스트 | sonnet | API 설계 + MockMvc 패턴 |
+| AI 알고리즘 구현 | sonnet~opus | 로직 복잡도에 따라 |
+| 아키텍처 결정 | opus | 최고 품질 필요 |
+| Docker/CI 설정 | sonnet | 설정 파일 구조 이해 필요 |
 
 ---
 
@@ -59,23 +64,23 @@ Reviewer → spec.md + 코드만 읽고 리뷰
 
 ```
 # 세션 시작 프롬프트 (최소화)
-docs/PROGRESS.md 읽고 🔄 항목부터 이어서 진행해줘.
+"개발 계속 진행해줘"  → PROGRESS.md 자동 읽음
 ```
 
 PROGRESS.md가 정확하면 수십 줄의 재설명이 불필요하다.
 
 ---
 
-## 5. 컨텍스트 범위 제한
+## 5. Subagent 활용
 
-필요한 파일만 읽도록 요청을 구체적으로 작성한다.
+독립 작업을 서브 에이전트에 위임해 메인 컨텍스트를 보호한다.
 
-```bash
-# 나쁜 예: 전체 프로젝트 스캔
-"프로젝트 전체를 분석해줘"
-
-# 좋은 예: 특정 파일/폴더 지정
-"backend/src/main/java/com/aibase/ai/llm/ 폴더만 읽고 분석해줘"
+```
+메인 에이전트: 전체 흐름 조율
+    ↓ 위임
+서브 에이전트 (Explore): 코드베이스 탐색 (메인 컨텍스트 오염 방지)
+서브 에이전트 (Plan): 설계 검토 (독립 컨텍스트)
+서브 에이전트 (code-reviewer): 코드 리뷰 (독립 판단)
 ```
 
 ---
@@ -86,8 +91,10 @@ PROGRESS.md가 정확하면 수십 줄의 재설명이 불필요하다.
 재작업 토큰을 절약한다.
 
 ```
-pre-edit.sh → @Autowired, lombok, System.out.println 차단
-→ 수정 요청 없이 처음부터 올바른 코드 작성 유도
+pre-edit.sh   → @Autowired, lombok, System.out.println 차단
+pre-bash.sh   → force push, rm -rf, DROP TABLE 차단
+post-edit.sh  → Java 파일 수정 시 컴파일 자동 검증
+stop-check.sh → 테스트 누락 시 완료 차단, PROGRESS.md 업데이트 확인
 ```
 
 ---
@@ -106,23 +113,17 @@ pre-edit.sh → @Autowired, lombok, System.out.println 차단
 
 ## 8. 현재 적용 중인 최적화 설정
 
-### `.claude/settings.json` Hook 설정
+### Hook 체인 (`.claude/settings.json`)
 
-```json
-{
-  "hooks": {
-    "UserPromptSubmit": [코드 작업 시 컨벤션 리마인더],
-    "PreToolUse(Edit|Write)": [금지 패턴 차단 → 재작업 방지],
-    "Stop": [PROGRESS.md 업데이트 확인 → 세션 복구 비용 절감]
-  }
-}
+```
+PreToolUse(Edit|Write) → pre-edit.sh   : 금지 패턴 사전 차단
+PreToolUse(Bash)       → pre-bash.sh   : 위험 명령 차단
+PostToolUse(Edit|Write) → post-edit.sh : 컴파일 자동 검증
+Stop                   → stop-check.sh : 테스트 + PROGRESS.md 확인
 ```
 
-### 모델별 작업 분류 (이 프로젝트 기준)
+### 모델 기본값
 
-| 작업 | 실제 사용 모델 |
-|------|-------------|
-| CRUD 엔티티/DTO 추가 | haiku |
-| AI 알고리즘 (선형 회귀, 앙상블 등) | sonnet |
-| 아키텍처 설계 (CLAUDE.md 계층 구조) | sonnet |
-| 멀티 에이전트 파이프라인 설계 | opus |
+- `.claude/settings.json`의 `"model": "claude-sonnet-4-6"` 이 기본값
+- 단순 작업 요청 시 프롬프트에 `[haiku]` 접두어로 모델 전환 유도 가능
+- 복잡한 설계 시 프롬프트에 `[opus]` 접두어 사용
