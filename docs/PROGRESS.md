@@ -1,6 +1,6 @@
 # AI Base - 진행 현황
 
-> 마지막 업데이트: 2026-04-11 (멀티유저 플랫폼 + 회원가입 버그 수정 완료)
+> 마지막 업데이트: 2026-04-11 (포트폴리오 서비스 흐름 완성)
 > 세션이 끊겼을 경우 이 문서를 읽고 이어서 작업하세요.
 
 ---
@@ -171,7 +171,8 @@
 | 회원가입 버그 수정 | ✅ | Zustand persist hydration 타이밍 → /me 호출 제거로 해결 |
 | AuthControllerTest 수정 | ✅ | username 필드 추가, /me 테스트 JwtUserDetails로 교체 |
 | AuthServiceTest 신규 | ✅ | register/login 성공·실패 6개 케이스 |
-| 전체 테스트 | ✅ | 62개 전부 통과 (실패 0) |
+| 전체 테스트 | ✅ | 70개 전부 통과 (실패 0) |
+| 포트폴리오 서비스 흐름 | ✅ | 온보딩 UI, username 필터, 경로 수정, /api/ 중복 제거 |
 | Docker 프로젝트명 | ✅ | docker → ai_base, 컨테이너 ai_base-* |
 
 ### 현재 실행 중인 Docker 스택
