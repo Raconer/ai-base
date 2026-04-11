@@ -21,7 +21,7 @@ export default function UserBlog() {
 
   const { data, isLoading } = useQuery<{ content: Post[] }>({
     queryKey: ['user-posts', username],
-    queryFn: () => api.get('/api/posts').then(r => r.data.data),
+    queryFn: () => api.get('/posts').then(r => r.data.data),
   })
 
   const posts = data?.content ?? []

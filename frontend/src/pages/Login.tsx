@@ -30,7 +30,7 @@ export default function Login() {
   const [error, setError] = useState('')
 
   const loginMutation = useMutation({
-    mutationFn: () => api.post<{ data: TokenResponse }>('/api/auth/login', { email, password }),
+    mutationFn: () => api.post<{ data: TokenResponse }>('/auth/login', { email, password }),
     onSuccess: (res) => {
       const { accessToken, refreshToken, id, email: userEmail, username: userUsername, name: userName, role } = res.data.data
       setTokens(accessToken, refreshToken)
@@ -41,7 +41,7 @@ export default function Login() {
   })
 
   const registerMutation = useMutation({
-    mutationFn: () => api.post<{ data: TokenResponse }>('/api/auth/register', { email, password, username, name }),
+    mutationFn: () => api.post<{ data: TokenResponse }>('/auth/register', { email, password, username, name }),
     onSuccess: (res) => {
       const { accessToken, refreshToken, id, email: userEmail, username: userUsername, name: userName, role } = res.data.data
       setTokens(accessToken, refreshToken)

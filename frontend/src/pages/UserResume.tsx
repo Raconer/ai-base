@@ -18,7 +18,7 @@ export default function UserResume() {
 
   const { data, isLoading, isError } = useQuery<ResumeData[]>({
     queryKey: ['user-resume', username],
-    queryFn: () => api.get('/api/resumes').then(r => r.data.data),
+    queryFn: () => api.get('/resumes').then(r => r.data.data),
   })
 
   const primary = data?.find(r => r.isPrimary) ?? data?.[0]
