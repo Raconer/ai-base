@@ -1,6 +1,6 @@
 # AI Base - 진행 현황
 
-> 마지막 업데이트: 2026-04-11 (domain tests + CI/CD 진행 중)
+> 마지막 업데이트: 2026-04-11 (멀티유저 플랫폼 + 회원가입 버그 수정 완료)
 > 세션이 끊겼을 경우 이 문서를 읽고 이어서 작업하세요.
 
 ---
@@ -156,6 +156,31 @@
 - **AiBaseApplication**: `@EnableJpaRepositories` 추가
 - **docker-compose.yml**: 포트 충돌 방지 (PG: 5435, Redis: 6383, BE: 8082, FE: 3007)
 - **FE 컴포넌트**: JSX 구조 수정, 타입 정합성 개선
+
+---
+
+## 멀티유저 플랫폼 전환 + 버그수정 ✅ 완료 (2026-04-11)
+
+| 항목 | 상태 | 내용 |
+|------|------|------|
+| 멀티유저 라우팅 | ✅ | `/:username/*` 경로, UserPortfolio/UserBlog/UserResume 페이지 |
+| username 컬럼 추가 | ✅ | Flyway V1 마이그레이션, User 엔티티 + RegisterRequest |
+| TokenResponse 개선 | ✅ | id/email/role 포함 → /me 추가 호출 제거 |
+| 랜딩 페이지 리디자인 | ✅ | SaaS 스타일, FEATURED_USERS 카드, 기능 그리드 |
+| CORS + Security 수정 | ✅ | localhost:3007 허용, `.cors()` Security 연결 |
+| 회원가입 버그 수정 | ✅ | Zustand persist hydration 타이밍 → /me 호출 제거로 해결 |
+| AuthControllerTest 수정 | ✅ | username 필드 추가, /me 테스트 JwtUserDetails로 교체 |
+| AuthServiceTest 신규 | ✅ | register/login 성공·실패 6개 케이스 |
+| 전체 테스트 | ✅ | 62개 전부 통과 (실패 0) |
+| Docker 프로젝트명 | ✅ | docker → ai_base, 컨테이너 ai_base-* |
+
+### 현재 실행 중인 Docker 스택
+| 컨테이너 | 포트 | 상태 |
+|---------|------|------|
+| ai_base-postgres | 5435 | ✅ |
+| ai_base-redis | 6383 | ✅ |
+| ai_base-backend | 8085 | ✅ |
+| ai_base-frontend | 3007 | ✅ |
 
 ---
 
