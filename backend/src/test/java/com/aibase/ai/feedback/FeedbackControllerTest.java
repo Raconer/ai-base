@@ -2,6 +2,7 @@ package com.aibase.ai.feedback;
 
 import com.aibase.ai.feedback.dto.FeedbackRequest;
 import com.aibase.ai.feedback.dto.FeedbackResponse;
+import com.aibase.common.security.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class FeedbackControllerTest {
 
     @MockBean
     private FeedbackLoopService feedbackService;
+
+    @MockBean
+    private JwtTokenProvider jwtTokenProvider;
 
     @Test
     @WithMockUser
