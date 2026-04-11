@@ -58,8 +58,51 @@ src/
 
 ### 스타일링
 - TailwindCSS 4 유틸리티 클래스 사용
-- 다크모드: `dark:` prefix
+- 다크모드: `dark:` prefix — 반드시 모든 색상 클래스에 `dark:` 쌍 작성
 - 공통 컴포넌트(Card, Button 등) 우선 사용
+- **UI 작업 시 반드시 `.claude/skills/ui-design/SKILL.md` 참조**
+
+### Tailwind v4 금지 클래스
+| ❌ 사용 금지 | ✅ 대체 |
+|------------|--------|
+| `bg-gradient-to-*` | `bg-linear-to-*` |
+| `flex-shrink-0` | `shrink-0` |
+| `flex-grow` | `grow` |
+| `w-[600px]` 등 임의값 | Tailwind 스케일 단위 사용 |
+
+---
+
+## 디자인 시스템 요약
+
+> 상세 내용은 `.claude/skills/ui-design/SKILL.md` 참조
+
+### 주요 색상
+- **Primary**: `blue-600` / dark: `blue-400`
+- **Surface**: `white` / dark: `gray-900`
+- **Surface Alt**: `gray-50` / dark: `gray-800`
+- **Border**: `gray-200` / dark: `gray-700`
+- **Text**: `gray-900` / dark: `white`
+- **Text Muted**: `gray-400` / dark: `gray-500`
+
+### 컨테이너 너비
+- 랜딩 섹션: `max-w-5xl mx-auto px-6`
+- 포트폴리오/블로그: `max-w-3xl mx-auto px-4`
+- 대시보드: `max-w-6xl mx-auto px-4`
+- 폼: `max-w-md mx-auto`
+
+### 카드 기본형
+```tsx
+<div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200
+                dark:border-gray-800 p-5 hover:shadow-md transition-all duration-200">
+```
+
+### 버튼 기본형
+```tsx
+// Primary
+<button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors">
+// Ghost
+<button className="px-6 py-3 border border-gray-200 dark:border-gray-700 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+```
 
 ---
 
