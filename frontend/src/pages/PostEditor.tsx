@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { useAuthStore } from '../stores/authStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import api from '../lib/api'
 import Card from '../components/ui/Card'
@@ -8,10 +9,11 @@ import Button from '../components/ui/Button'
 import AiWriter from '../components/ai/AiWriter'
 
 export default function PostEditor() {
-  const { id } = useParams<{ id: string }>()
+  const { username, id } = useParams<{ username: string; id: string }>()
   const isEdit = !!id
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const { user: me } = useAuthStore()
 
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
@@ -43,7 +45,9 @@ export default function PostEditor() {
       isEdit ? api.put(`/posts/${id}`, body) : api.post('/posts', body),
     onSuccess: (res: { data: { data: { id: number } } }) => {
       queryClient.invalidateQueries({ queryKey: ['posts'] })
-      navigate(`/blog/${isEdit ? id : res.data.data.id}`)
+      const owner = username ?? me?.username
+      const postId = isEdit ? id : res.data.data.id
+      navigate(`/${owner}/blog/${postId}`)
     },
   })
 

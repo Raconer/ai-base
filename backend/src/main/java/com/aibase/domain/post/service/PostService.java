@@ -31,11 +31,15 @@ public class PostService {
     private final TagRepository tagRepository;
     private final UserRepository userRepository;
 
-    public PageResponse<PostSummaryResponse> getPosts(String category, Pageable pageable) {
-        Page<Post> page = (category != null && !category.isBlank())
-                ? postRepository.findByCategoryAndStatus(category, PostStatus.PUBLISHED, pageable)
-                : postRepository.findByStatus(PostStatus.PUBLISHED, pageable);
-
+    public PageResponse<PostSummaryResponse> getPosts(String category, String username, Pageable pageable) {
+        Page<Post> page;
+        if (username != null && !username.isBlank()) {
+            page = postRepository.findByUserUsernameAndStatus(username, PostStatus.PUBLISHED, pageable);
+        } else if (category != null && !category.isBlank()) {
+            page = postRepository.findByCategoryAndStatus(category, PostStatus.PUBLISHED, pageable);
+        } else {
+            page = postRepository.findByStatus(PostStatus.PUBLISHED, pageable);
+        }
         return PageResponse.from(page.map(PostSummaryResponse::from));
     }
 

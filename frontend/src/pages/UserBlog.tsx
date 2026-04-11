@@ -21,7 +21,7 @@ export default function UserBlog() {
 
   const { data, isLoading } = useQuery<{ content: Post[] }>({
     queryKey: ['user-posts', username],
-    queryFn: () => api.get('/posts').then(r => r.data.data),
+    queryFn: () => api.get(`/posts?username=${username}`).then(r => r.data.data),
   })
 
   const posts = data?.content ?? []
@@ -63,7 +63,7 @@ export default function UserBlog() {
               >
                 <div className="flex justify-between gap-2">
                   <h2 className="font-semibold text-gray-900 dark:text-white">{post.title}</h2>
-                  <span className="text-xs text-gray-400 flex-shrink-0">
+                  <span className="text-xs text-gray-400 shrink-0">
                     {new Date(post.createdAt).toLocaleDateString('ko-KR')}
                   </span>
                 </div>

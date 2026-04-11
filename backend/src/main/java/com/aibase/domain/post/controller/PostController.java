@@ -30,11 +30,12 @@ public class PostController {
     @Operation(summary = "게시글 목록 조회")
     public ResponseEntity<ApiResponse<PageResponse<PostSummaryResponse>>> getPosts(
             @RequestParam(required = false) String category,
+            @RequestParam(required = false) String username,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
         PageRequest pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return ResponseEntity.ok(ApiResponse.ok(postService.getPosts(category, pageable)));
+        return ResponseEntity.ok(ApiResponse.ok(postService.getPosts(category, username, pageable)));
     }
 
     @GetMapping("/search")
