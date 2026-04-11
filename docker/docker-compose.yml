@@ -2,7 +2,7 @@ services:
 
   postgres:
     image: pgvector/pgvector:pg16
-    container_name: aibase-postgres
+    container_name: ai_base-postgres
     environment:
       POSTGRES_DB: aibase
       POSTGRES_USER: aibase
@@ -20,7 +20,7 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: aibase-redis
+    container_name: ai_base-redis
     ports:
       - "6383:6379"
     volumes:
@@ -36,9 +36,9 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    container_name: aibase-backend
+    container_name: ai_base-backend
     ports:
-      - "8082:8080"
+      - "8085:8080"
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
@@ -59,7 +59,7 @@ services:
     build:
       context: ../frontend
       dockerfile: Dockerfile
-    container_name: aibase-frontend
+    container_name: ai_base-frontend
     ports:
       - "3007:80"
     depends_on:
