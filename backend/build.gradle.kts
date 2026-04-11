@@ -35,6 +35,10 @@ dependencies {
     // Database
     runtimeOnly("org.postgresql:postgresql")
 
+    // Flyway (DB 마이그레이션)
+    implementation("org.flywaydb:flyway-core")
+    implementation("org.flywaydb:flyway-database-postgresql")
+
     // pgvector
     implementation("com.pgvector:pgvector:0.1.6")
 
