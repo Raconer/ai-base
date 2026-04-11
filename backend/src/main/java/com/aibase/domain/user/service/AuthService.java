@@ -27,10 +27,14 @@ public class AuthService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw BusinessException.conflict("이미 사용 중인 이메일입니다.");
         }
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw BusinessException.conflict("이미 사용 중인 username입니다.");
+        }
 
         User user = User.builder()
                 .email(request.getEmail())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
+                .username(request.getUsername())
                 .name(request.getName())
                 .role(UserRole.USER)
                 .build();
@@ -76,6 +80,8 @@ public class AuthService {
         return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .username(user.getUsername())
+                .name(user.getName())
                 .build();
     }
 }

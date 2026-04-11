@@ -19,6 +19,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String passwordHash;
 
+    @Column(nullable = false, unique = true, length = 50)
+    private String username;
+
     @Column(nullable = false)
     private String name;
 
@@ -32,10 +35,11 @@ public class User extends BaseEntity {
     private String avatarUrl;
 
     @Builder
-    public User(String email, String passwordHash, String name, UserRole role,
+    public User(String email, String passwordHash, String username, String name, UserRole role,
                 String bio, String avatarUrl) {
         this.email = email;
         this.passwordHash = passwordHash;
+        this.username = username;
         this.name = name;
         this.role = role != null ? role : UserRole.USER;
         this.bio = bio;

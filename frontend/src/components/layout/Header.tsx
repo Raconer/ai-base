@@ -20,14 +20,15 @@ export default function Header() {
         </Link>
 
         <nav className="flex items-center gap-6 text-sm">
-          <Link to="/blog" className="text-gray-600 dark:text-gray-300 hover:text-blue-600">Blog</Link>
           <Link to="/search" className="text-gray-600 dark:text-gray-300 hover:text-blue-600">Search</Link>
-          <Link to="/about" className="text-gray-600 dark:text-gray-300 hover:text-blue-600">About</Link>
 
-          {isAuthenticated() ? (
+          {isAuthenticated() && user ? (
             <>
+              <Link to={`/${user.username}`} className="text-gray-600 dark:text-gray-300 hover:text-blue-600">
+                @{user.username}
+              </Link>
               <Link to="/dashboard" className="text-gray-600 dark:text-gray-300 hover:text-blue-600">
-                {user?.name ?? 'Dashboard'}
+                Dashboard
               </Link>
               <button
                 onClick={handleLogout}

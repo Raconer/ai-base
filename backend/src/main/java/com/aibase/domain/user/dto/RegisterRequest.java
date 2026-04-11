@@ -2,6 +2,7 @@ package com.aibase.domain.user.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +18,11 @@ public class RegisterRequest {
     @NotBlank
     @Size(min = 8)
     private String password;
+
+    @NotBlank
+    @Size(min = 3, max = 50)
+    @Pattern(regexp = "^[a-zA-Z0-9_-]+$", message = "username은 영문, 숫자, _, - 만 사용 가능합니다")
+    private String username;
 
     @NotBlank
     private String name;
