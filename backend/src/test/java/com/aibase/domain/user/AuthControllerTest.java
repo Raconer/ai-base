@@ -51,8 +51,11 @@ class AuthControllerTest {
     private final TokenResponse tokenResponse = TokenResponse.builder()
             .accessToken("access-token")
             .refreshToken("refresh-token")
+            .id(1L)
+            .email("test@example.com")
             .username("testuser")
             .name("테스트유저")
+            .role("USER")
             .build();
 
     // ── register ──────────────────────────────────────────────────────────────

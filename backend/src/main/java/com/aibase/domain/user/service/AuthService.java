@@ -80,8 +80,11 @@ public class AuthService {
         return TokenResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .id(user.getId())
+                .email(user.getEmail())
                 .username(user.getUsername())
                 .name(user.getName())
+                .role(user.getRole().name())
                 .build();
     }
 }

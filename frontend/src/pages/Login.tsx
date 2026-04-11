@@ -10,8 +10,11 @@ import Button from '../components/ui/Button'
 interface TokenResponse {
   accessToken: string
   refreshToken: string
+  id: number
+  email: string
   username: string
   name: string
+  role: string
 }
 
 export default function Login() {
@@ -28,24 +31,22 @@ export default function Login() {
 
   const loginMutation = useMutation({
     mutationFn: () => api.post<{ data: TokenResponse }>('/api/auth/login', { email, password }),
-    onSuccess: async (res) => {
-      const { accessToken, refreshToken } = res.data.data
+    onSuccess: (res) => {
+      const { accessToken, refreshToken, id, email: userEmail, username: userUsername, name: userName, role } = res.data.data
       setTokens(accessToken, refreshToken)
-      const me = await api.get<{ data: { id: number; email: string; username: string; name: string; role: string } }>('/api/auth/me')
-      setUser(me.data.data)
-      navigate(`/${me.data.data.username}`)
+      setUser({ id, email: userEmail, username: userUsername, name: userName, role })
+      navigate(`/${userUsername}`)
     },
     onError: () => setError('이메일 또는 비밀번호가 올바르지 않습니다'),
   })
 
   const registerMutation = useMutation({
     mutationFn: () => api.post<{ data: TokenResponse }>('/api/auth/register', { email, password, username, name }),
-    onSuccess: async (res) => {
-      const { accessToken, refreshToken } = res.data.data
+    onSuccess: (res) => {
+      const { accessToken, refreshToken, id, email: userEmail, username: userUsername, name: userName, role } = res.data.data
       setTokens(accessToken, refreshToken)
-      const me = await api.get<{ data: { id: number; email: string; username: string; name: string; role: string } }>('/api/auth/me')
-      setUser(me.data.data)
-      navigate(`/${me.data.data.username}`)
+      setUser({ id, email: userEmail, username: userUsername, name: userName, role })
+      navigate(`/${userUsername}`)
     },
     onError: (err: unknown) => {
       const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message

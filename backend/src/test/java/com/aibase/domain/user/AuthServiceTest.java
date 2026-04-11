@@ -73,6 +73,7 @@ class AuthServiceTest {
         assertThat(result.getAccessToken()).isEqualTo("access-token");
         assertThat(result.getRefreshToken()).isEqualTo("refresh-token");
         assertThat(result.getUsername()).isEqualTo("testuser");
+        assertThat(result.getRole()).isEqualTo("USER");
         verify(userRepository).save(any(User.class));
     }
 
