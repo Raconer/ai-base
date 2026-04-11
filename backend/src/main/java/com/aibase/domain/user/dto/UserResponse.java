@@ -13,6 +13,7 @@ public class UserResponse {
 
     private final Long id;
     private final String email;
+    private final String username;
     private final String name;
     private final UserRole role;
     private final String bio;
@@ -23,6 +24,7 @@ public class UserResponse {
         return UserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
+                .username(user.getUsername())
                 .name(user.getName())
                 .role(user.getRole())
                 .bio(user.getBio())
