@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import api from '../lib/api'
 import { useAuthStore } from '../stores/authStore'
-import Card from '../components/ui/Card'
 
 interface ResumeResponse {
   id: number
@@ -30,63 +29,71 @@ export default function Resume() {
 
   if (!isAuthenticated()) {
     return (
-      <div className="text-center py-16 text-gray-500 dark:text-gray-400">
+      <div className="text-center py-20 text-[#6b7590]">
         이력서를 보려면 로그인이 필요합니다.
       </div>
     )
   }
 
-  if (isLoading) return <div className="text-center py-12 text-gray-400">로딩 중...</div>
+  if (isLoading) return (
+    <div className="flex justify-center py-20">
+      <div className="w-6 h-6 border-2 border-[#4f8ef7] border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
 
   if (!primary) {
     return (
-      <div className="text-center py-16 text-gray-500 dark:text-gray-400">
-        <p className="mb-4">등록된 이력서가 없습니다.</p>
+      <div className="text-center py-20 text-[#6b7590]">
+        <div className="text-4xl mb-3">📄</div>
+        <p>등록된 이력서가 없습니다.</p>
       </div>
     )
   }
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{primary.title}</h1>
-        <span className="text-sm text-gray-500 dark:text-gray-400">
-          최종 수정: {new Date(primary.updatedAt).toLocaleDateString()}
+    <div className="max-w-3xl mx-auto px-4 py-8 space-y-4">
+      <div className="flex items-center justify-between mb-2">
+        <div>
+          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-1">Resume</p>
+          <h1 className="text-2xl font-bold text-white">{primary.title}</h1>
+        </div>
+        <span className="text-xs text-[#6b7590]">
+          최종 수정: {new Date(primary.updatedAt).toLocaleDateString('ko-KR')}
         </span>
       </div>
 
       {primary.summary && (
-        <Card>
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-2">요약</h2>
-          <p className="text-gray-600 dark:text-gray-400 whitespace-pre-wrap">{primary.summary}</p>
-        </Card>
+        <div className="bg-[#1a1f2e] rounded-2xl p-5">
+          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">요약</p>
+          <p className="text-sm text-[#a8b2c8] whitespace-pre-wrap leading-relaxed">{primary.summary}</p>
+        </div>
       )}
 
       {primary.skills && Object.keys(primary.skills).length > 0 && (
-        <Card>
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-2">기술 스택</h2>
-          <pre className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+        <div className="bg-[#1a1f2e] rounded-2xl p-5">
+          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">기술 스택</p>
+          <pre className="text-sm text-[#a8b2c8] whitespace-pre-wrap font-mono">
             {JSON.stringify(primary.skills, null, 2)}
           </pre>
-        </Card>
+        </div>
       )}
 
       {primary.experience && Object.keys(primary.experience).length > 0 && (
-        <Card>
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-2">경력</h2>
-          <pre className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+        <div className="bg-[#1a1f2e] rounded-2xl p-5">
+          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">경력</p>
+          <pre className="text-sm text-[#a8b2c8] whitespace-pre-wrap font-mono">
             {JSON.stringify(primary.experience, null, 2)}
           </pre>
-        </Card>
+        </div>
       )}
 
       {primary.education && Object.keys(primary.education).length > 0 && (
-        <Card>
-          <h2 className="font-semibold text-gray-900 dark:text-white mb-2">학력</h2>
-          <pre className="text-sm text-gray-600 dark:text-gray-400 whitespace-pre-wrap">
+        <div className="bg-[#1a1f2e] rounded-2xl p-5">
+          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">학력</p>
+          <pre className="text-sm text-[#a8b2c8] whitespace-pre-wrap font-mono">
             {JSON.stringify(primary.education, null, 2)}
           </pre>
-        </Card>
+        </div>
       )}
     </div>
   )

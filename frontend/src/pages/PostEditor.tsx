@@ -3,10 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import api from '../lib/api'
-import Card from '../components/ui/Card'
-import Input from '../components/ui/Input'
-import Button from '../components/ui/Button'
 import AiWriter from '../components/ai/AiWriter'
+import Input from '../components/ui/Input'
 
 export default function PostEditor() {
   const { username, id } = useParams<{ username: string; id: string }>()
@@ -51,7 +49,7 @@ export default function PostEditor() {
     },
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     mutation.mutate({
       title,
@@ -63,11 +61,17 @@ export default function PostEditor() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-        {isEdit ? '게시글 수정' : '새 게시글'}
-      </h1>
-      <Card>
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <div className="mb-6">
+        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-1">
+          {isEdit ? 'Edit Post' : 'New Post'}
+        </p>
+        <h1 className="text-2xl font-bold text-white">
+          {isEdit ? '게시글 수정' : '새 게시글'}
+        </h1>
+      </div>
+
+      <div className="bg-[#1a1f2e] rounded-2xl p-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="제목"
@@ -84,12 +88,12 @@ export default function PostEditor() {
                 placeholder="dev, ai, etc"
               />
             </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">상태</label>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-xs font-medium text-[#6b7590] uppercase tracking-wider">상태</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
-                className="border rounded px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:border-gray-600"
+                className="px-4 py-3 bg-[#252b3b] border border-[#2a3042] rounded-xl text-sm text-white outline-none focus:border-[#4f8ef7] transition-colors"
               >
                 <option value="DRAFT">초안</option>
                 <option value="PUBLISHED">공개</option>
@@ -102,9 +106,9 @@ export default function PostEditor() {
             onChange={(e) => setTags(e.target.value)}
             placeholder="spring, java, ai"
           />
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">내용</label>
+              <label className="text-xs font-medium text-[#6b7590] uppercase tracking-wider">내용</label>
               <AiWriter text={content} onApply={(corrected) => setContent(corrected)} />
             </div>
             <textarea
@@ -112,19 +116,30 @@ export default function PostEditor() {
               onChange={(e) => setContent(e.target.value)}
               rows={15}
               required
-              className="border rounded px-3 py-2 text-sm bg-white dark:bg-gray-800 dark:border-gray-600 text-gray-900 dark:text-gray-100 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-y"
+              className="w-full px-4 py-3 bg-[#252b3b] border border-[#2a3042] rounded-xl text-sm text-white placeholder-[#6b7590] outline-none focus:border-[#4f8ef7] focus:ring-1 focus:ring-[#4f8ef7]/30 transition-colors resize-y"
             />
           </div>
-          <div className="flex gap-3 justify-end">
-            <Button type="button" variant="ghost" onClick={() => navigate(-1)}>
+          <div className="flex gap-3 justify-end pt-2">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="px-5 py-2.5 bg-[#252b3b] hover:bg-[#2d3447] text-[#a8b2c8] rounded-xl text-sm font-semibold transition-colors"
+            >
               취소
-            </Button>
-            <Button type="submit" loading={mutation.isPending}>
+            </button>
+            <button
+              type="submit"
+              disabled={mutation.isPending}
+              className="px-5 py-2.5 bg-[#4f8ef7] hover:bg-[#3d7ef6] text-white rounded-xl text-sm font-semibold transition-colors disabled:opacity-50 flex items-center gap-2"
+            >
+              {mutation.isPending && (
+                <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              )}
               {isEdit ? '수정 완료' : '작성 완료'}
-            </Button>
+            </button>
           </div>
         </form>
-      </Card>
+      </div>
     </div>
   )
 }

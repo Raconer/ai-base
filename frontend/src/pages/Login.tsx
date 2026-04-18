@@ -3,9 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useMutation } from '@tanstack/react-query'
 import api from '../lib/api'
 import { useAuthStore } from '../stores/authStore'
-import Card from '../components/ui/Card'
-import Input from '../components/ui/Input'
-import Button from '../components/ui/Button'
 
 interface TokenResponse {
   accessToken: string
@@ -56,7 +53,7 @@ export default function Login() {
 
   const isPending = loginMutation.isPending || registerMutation.isPending
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
     if (isRegister) registerMutation.mutate()
@@ -65,17 +62,22 @@ export default function Login() {
 
   return (
     <div className="max-w-md mx-auto mt-16 px-4">
-      <Card>
+      <div className="bg-[#1a1f2e] rounded-2xl p-6">
+
         {/* 탭 */}
-        <div className="flex mb-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex gap-1 bg-[#0f1117] rounded-xl p-1 mb-6">
           <button
-            className={`flex-1 pb-3 text-sm font-medium border-b-2 transition ${!isRegister ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
+              !isRegister ? 'bg-[#252b3b] text-white' : 'text-[#6b7590] hover:text-[#a8b2c8]'
+            }`}
             onClick={() => { setSearchParams({}); setError('') }}
           >
             로그인
           </button>
           <button
-            className={`flex-1 pb-3 text-sm font-medium border-b-2 transition ${isRegister ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+            className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors ${
+              isRegister ? 'bg-[#252b3b] text-white' : 'text-[#6b7590] hover:text-[#a8b2c8]'
+            }`}
             onClick={() => { setSearchParams({ mode: 'register' }); setError('') }}
           >
             회원가입
@@ -85,50 +87,71 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {isRegister && (
             <>
-              <Input
-                label="이름"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="홍길동"
-                required
-              />
-              <div>
-                <Input
-                  label="Username"
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-[#6b7590] uppercase tracking-wider">이름</label>
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="홍길동"
+                  required
+                  className="px-4 py-3 bg-[#252b3b] border border-[#2a3042] rounded-xl text-sm text-white placeholder-[#6b7590] outline-none focus:border-[#4f8ef7] focus:ring-1 focus:ring-[#4f8ef7]/30 transition-colors"
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-[#6b7590] uppercase tracking-wider">Username</label>
+                <input
                   value={username}
                   onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/[^a-z0-9_-]/g, ''))}
                   placeholder="hong_gildong"
                   required
+                  className="px-4 py-3 bg-[#252b3b] border border-[#2a3042] rounded-xl text-sm text-white placeholder-[#6b7590] outline-none focus:border-[#4f8ef7] focus:ring-1 focus:ring-[#4f8ef7]/30 transition-colors"
                 />
                 {username && (
-                  <p className="text-xs text-gray-400 mt-1">
-                    내 포트폴리오 주소: <span className="text-blue-500">/{username}</span>
+                  <p className="text-xs text-[#6b7590]">
+                    포트폴리오 주소: <span className="text-[#4f8ef7]">/{username}</span>
                   </p>
                 )}
               </div>
             </>
           )}
-          <Input
-            label="이메일"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <Input
-            label="비밀번호"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="8자 이상"
-            required
-          />
-          {error && <p className="text-sm text-red-500">{error}</p>}
-          <Button type="submit" className="w-full" loading={isPending}>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-[#6b7590] uppercase tracking-wider">이메일</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="px-4 py-3 bg-[#252b3b] border border-[#2a3042] rounded-xl text-sm text-white placeholder-[#6b7590] outline-none focus:border-[#4f8ef7] focus:ring-1 focus:ring-[#4f8ef7]/30 transition-colors"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-xs font-medium text-[#6b7590] uppercase tracking-wider">비밀번호</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="8자 이상"
+              required
+              className="px-4 py-3 bg-[#252b3b] border border-[#2a3042] rounded-xl text-sm text-white placeholder-[#6b7590] outline-none focus:border-[#4f8ef7] focus:ring-1 focus:ring-[#4f8ef7]/30 transition-colors"
+            />
+          </div>
+
+          {error && <p className="text-sm text-red-400">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full py-3 bg-[#4f8ef7] hover:bg-[#3d7ef6] text-white rounded-xl font-semibold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {isPending && (
+              <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            )}
             {isRegister ? '회원가입' : '로그인'}
-          </Button>
+          </button>
         </form>
-      </Card>
+      </div>
     </div>
   )
 }

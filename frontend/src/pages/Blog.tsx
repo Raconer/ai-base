@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import api from '../lib/api'
-import Card from '../components/ui/Card'
 
 interface PostSummary {
   id: number
@@ -38,13 +37,17 @@ export default function Blog() {
   })
 
   return (
-    <div className="space-y-6">
+    <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Blog</h1>
+        <div>
+          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-1">Blog</p>
+          <h1 className="text-2xl font-bold text-white">전체 글</h1>
+        </div>
         <select
           value={category}
           onChange={(e) => { setCategory(e.target.value); setPage(0) }}
-          className="border rounded px-3 py-1 text-sm bg-white dark:bg-gray-800 dark:border-gray-600"
+          className="px-3 py-2 bg-[#1a1f2e] border border-[#2a3042] text-[#a8b2c8] text-sm rounded-xl outline-none focus:border-[#4f8ef7] transition-colors"
         >
           <option value="">전체 카테고리</option>
           <option value="dev">개발</option>
@@ -54,55 +57,55 @@ export default function Blog() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12 text-gray-400">로딩 중...</div>
+        <div className="flex justify-center py-12">
+          <div className="w-6 h-6 border-2 border-[#4f8ef7] border-t-transparent rounded-full animate-spin" />
+        </div>
       ) : (
         <>
-          <div className="space-y-4">
+          <div className="space-y-2">
             {data?.content.map((post) => (
-              <Card key={post.id} className="hover:shadow-md transition-shadow">
-                <Link to={`/blog/${post.id}`} className="block">
-                  <h2 className="text-lg font-semibold text-gray-900 dark:text-white hover:text-blue-600 mb-2">
-                    {post.title}
-                  </h2>
-                  <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+              <Link key={post.id} to={`/blog/${post.id}`} className="block">
+                <div className="bg-[#1a1f2e] rounded-xl p-5 hover:bg-[#252b3b] transition-colors">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h2 className="text-base font-semibold text-white hover:text-[#4f8ef7] transition-colors">
+                      {post.title}
+                    </h2>
+                    <span className="text-xs text-[#6b7590] shrink-0">
+                      {new Date(post.createdAt).toLocaleDateString('ko-KR')}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap">
                     {post.category && (
-                      <span className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded">
+                      <span className="px-2.5 py-0.5 bg-[#4f8ef7]/10 text-[#4f8ef7] text-xs rounded-full font-medium">
                         {post.category}
                       </span>
                     )}
-                    <span>👁 {post.viewCount}</span>
-                    <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                    <span className="text-xs text-[#6b7590]">👁 {post.viewCount}</span>
+                    {post.tags.map((tag) => (
+                      <span key={tag} className="text-xs text-[#6b7590]">#{tag}</span>
+                    ))}
                   </div>
-                  {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {post.tags.map((tag) => (
-                        <span key={tag} className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </Link>
-              </Card>
+                </div>
+              </Link>
             ))}
           </div>
 
           {data && data.totalPages > 1 && (
-            <div className="flex justify-center gap-2">
+            <div className="flex justify-center gap-2 pt-2">
               <button
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={page === 0}
-                className="px-3 py-1 border rounded disabled:opacity-40"
+                className="px-4 py-2 bg-[#1a1f2e] border border-[#2a3042] text-[#a8b2c8] rounded-xl text-sm disabled:opacity-40 hover:bg-[#252b3b] transition-colors"
               >
                 이전
               </button>
-              <span className="px-3 py-1 text-sm text-gray-600 dark:text-gray-400">
+              <span className="px-4 py-2 text-sm text-[#6b7590]">
                 {page + 1} / {data.totalPages}
               </span>
               <button
                 onClick={() => setPage((p) => p + 1)}
                 disabled={!data.hasNext}
-                className="px-3 py-1 border rounded disabled:opacity-40"
+                className="px-4 py-2 bg-[#1a1f2e] border border-[#2a3042] text-[#a8b2c8] rounded-xl text-sm disabled:opacity-40 hover:bg-[#252b3b] transition-colors"
               >
                 다음
               </button>
