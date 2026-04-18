@@ -1,85 +1,102 @@
 import { Link } from 'react-router-dom'
-import Card from '../components/ui/Card'
 
 const aiFeatures = [
-  { icon: '🤖', title: 'LLM API', desc: '글 AI 교정 · 이력서 요약 · 오타 수정' },
-  { icon: '🔍', title: 'Vector Search', desc: 'pgvector 기반 시맨틱 검색 + RAG' },
-  { icon: '💬', title: 'Sentiment Analysis', desc: 'Claude API 감성분석 스코어링' },
-  { icon: '📄', title: 'PDF Pipeline', desc: 'PDF → 텍스트 추출 → 청킹 → DB' },
-  { icon: '📈', title: 'Ensemble Prediction', desc: '콘텐츠 추천 · 인기글 예측' },
-  { icon: '🔄', title: 'Adaptive Feedback', desc: '작성 → AI 평가 → 수정 → 재평가' },
-  { icon: '🧠', title: 'Multi-Agent', desc: '자동 분류 · 태그 생성 파이프라인' },
-  { icon: '📊', title: 'TimeSeries', desc: '방문자 통계 + 트렌드 예측' },
+  { icon: '🤖', title: 'LLM API', desc: '글 AI 교정 · 이력서 요약 · 오타 수정', color: 'text-[#4f8ef7]' },
+  { icon: '🔍', title: 'Vector Search', desc: 'pgvector 기반 시맨틱 검색 + RAG', color: 'text-cyan-400' },
+  { icon: '💬', title: 'Sentiment Analysis', desc: 'Claude API 감성분석 스코어링', color: 'text-violet-400' },
+  { icon: '📄', title: 'PDF Pipeline', desc: 'PDF → 텍스트 추출 → 청킹 → DB', color: 'text-orange-400' },
+  { icon: '📈', title: 'Ensemble Prediction', desc: '콘텐츠 추천 · 인기글 예측', color: 'text-emerald-400' },
+  { icon: '🔄', title: 'Adaptive Feedback', desc: '작성 → AI 평가 → 수정 → 재평가', color: 'text-pink-400' },
+  { icon: '🧠', title: 'Multi-Agent', desc: '자동 분류 · 태그 생성 파이프라인', color: 'text-[#4f8ef7]' },
+  { icon: '📊', title: 'TimeSeries', desc: '방문자 통계 + 트렌드 예측', color: 'text-orange-400' },
+]
+
+const techStack = [
+  {
+    label: 'Backend',
+    items: ['Spring Boot 3.4 + Java 21', 'JPA + QueryDSL', 'Spring Security + JWT'],
+  },
+  {
+    label: 'Frontend',
+    items: ['React 19 + Vite + TypeScript', 'TailwindCSS 4', 'Zustand + React Query'],
+  },
+  {
+    label: 'Database',
+    items: ['PostgreSQL 16 + pgvector', 'Redis 7', 'Docker Compose'],
+  },
 ]
 
 export default function Home() {
   return (
-    <div className="space-y-12">
-      <section className="text-center py-16">
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">AI Base</h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
-          5개 실전 프로젝트의 AI 기술을 하나의 풀스택 포트폴리오에 통합한 레퍼런스 저장소
+    <div className="max-w-5xl mx-auto px-6 py-12 space-y-12">
+
+      {/* 히어로 */}
+      <section className="py-8">
+        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-widest mb-4">김동호 · Portfolio</p>
+        <h1 className="text-4xl font-extrabold text-white mb-4 tracking-tight">
+          풀스택 AI 포트폴리오 레퍼런스
+        </h1>
+        <p className="text-base text-[#a8b2c8] max-w-xl mb-8 leading-relaxed">
+          5개 실전 프로젝트의 AI 기술을 하나의 풀스택 앱에 통합한 레퍼런스 저장소
         </p>
-        <div className="flex gap-4 justify-center">
+        <div className="flex gap-3 flex-wrap">
           <Link
             to="/blog"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium"
+            className="px-6 py-2.5 bg-[#4f8ef7] hover:bg-[#3d7ef6] text-white rounded-xl font-semibold text-sm transition-colors"
           >
             블로그 보기
+          </Link>
+          <Link
+            to="/kimdongho"
+            className="px-6 py-2.5 bg-[#1a1f2e] hover:bg-[#252b3b] border border-[#2a3042] text-[#a8b2c8] rounded-xl font-semibold text-sm transition-colors"
+          >
+            내 포트폴리오
           </Link>
           <a
             href="https://github.com/Raconer/ai-base"
             target="_blank"
             rel="noopener noreferrer"
-            className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 font-medium"
+            className="px-6 py-2.5 bg-[#1a1f2e] hover:bg-[#252b3b] border border-[#2a3042] text-[#a8b2c8] rounded-xl font-semibold text-sm transition-colors"
           >
             GitHub
           </a>
         </div>
       </section>
 
+      {/* AI 기술 목록 */}
       <section>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">AI 기술 목록</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-5">AI 기술 목록</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {aiFeatures.map((f) => (
-            <Card key={f.title} className="hover:shadow-md transition-shadow">
-              <div className="text-3xl mb-3">{f.icon}</div>
-              <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{f.title}</h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{f.desc}</p>
-            </Card>
+            <div key={f.title} className="bg-[#1a1f2e] rounded-2xl p-5 hover:bg-[#252b3b] transition-colors">
+              <div className={`text-2xl mb-3 ${f.color}`}>{f.icon}</div>
+              <h3 className="font-semibold text-white text-sm mb-1">{f.title}</h3>
+              <p className="text-xs text-[#a8b2c8] leading-relaxed">{f.desc}</p>
+            </div>
           ))}
         </div>
       </section>
 
+      {/* 기술 스택 */}
       <section>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">기술 스택</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Backend</h3>
-            <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-              <li>Spring Boot 3.4 + Java 21</li>
-              <li>JPA + QueryDSL</li>
-              <li>Spring Security + JWT</li>
-            </ul>
-          </Card>
-          <Card>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Frontend</h3>
-            <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-              <li>React 19 + Vite + TypeScript</li>
-              <li>TailwindCSS 4</li>
-              <li>Zustand + React Query</li>
-            </ul>
-          </Card>
-          <Card>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-2">Database</h3>
-            <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-              <li>PostgreSQL 16 + pgvector</li>
-              <li>Redis 7</li>
-              <li>Docker Compose</li>
-            </ul>
-          </Card>
+        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-5">기술 스택</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {techStack.map((s) => (
+            <div key={s.label} className="bg-[#1a1f2e] rounded-2xl p-5">
+              <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">{s.label}</p>
+              <ul className="space-y-2">
+                {s.items.map((item) => (
+                  <li key={item} className="text-sm text-[#a8b2c8] flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-[#4f8ef7] shrink-0" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
       </section>
+
     </div>
   )
 }
