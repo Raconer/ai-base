@@ -8,6 +8,22 @@ FIRST_LINE=$(echo "$COMMAND" | head -1)
 # 따옴표/heredoc 제거 후 실제 명령어 부분만
 CMD_PART=$(echo "$FIRST_LINE" | sed "s/['\"].*['\"]//g" | sed 's/\$(.*//')
 
+# ── 브랜치 강제 규칙 ──────────────────────────────────────────────────────────
+# git commit 시 main/master 직접 커밋 차단
+# (merge 커밋, PROGRESS.md 단독 업데이트는 허용)
+if echo "$CMD_PART" | grep -qE "^\s*git commit"; then
+  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  if [ "$CURRENT_BRANCH" = "main" ] || [ "$CURRENT_BRANCH" = "master" ]; then
+    # PROGRESS.md / docs / CLAUDE.md / settings.json 만 수정한 경우는 허용
+    STAGED=$(git diff --cached --name-only 2>/dev/null)
+    ONLY_DOCS=$(echo "$STAGED" | grep -vE "^(docs/|\.claude/|CLAUDE\.md|README\.md)" | wc -l | tr -d ' ')
+    if [ "$ONLY_DOCS" -gt 0 ]; then
+      echo '{"decision":"block","reason":"main 브랜치 직접 커밋 금지. feature/* 브랜치를 먼저 생성하라: git checkout -b feature/<name>"}'
+      exit 0
+    fi
+  fi
+fi
+
 # force push 차단 (--force-with-lease는 허용)
 if echo "$CMD_PART" | grep -qE "git push --force[^-]|git push --force$|git push -f "; then
   echo '{"decision":"block","reason":"force push 금지. --force-with-lease 사용하라"}'

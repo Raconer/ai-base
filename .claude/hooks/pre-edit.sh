@@ -4,6 +4,23 @@ CONTENT=$(echo "$INPUT" | jq -r '.tool_input.content // empty')
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
+# ── 브랜치 강제 규칙 ──────────────────────────────────────────────────────────
+# 소스 코드 파일 수정 시 main/master 브랜치 직접 편집 차단
+# 문서/설정 파일(docs, .claude, CLAUDE.md, *.md, *.json, *.sh)은 허용
+IS_SOURCE=false
+if echo "$FILE_PATH" | grep -qE "\.(tsx?|jsx?|java|kt|py|css|html)$"; then
+  IS_SOURCE=true
+fi
+
+if [ "$IS_SOURCE" = "true" ]; then
+  CURRENT_BRANCH=$(git -C "$(dirname "$FILE_PATH")" rev-parse --abbrev-ref HEAD 2>/dev/null \
+    || git rev-parse --abbrev-ref HEAD 2>/dev/null)
+  if [ "$CURRENT_BRANCH" = "main" ] || [ "$CURRENT_BRANCH" = "master" ]; then
+    echo '{"decision":"block","reason":"main 브랜치 직접 코드 수정 금지. feature/* 브랜치를 먼저 생성하라: git checkout -b feature/<name>"}'
+    exit 0
+  fi
+fi
+
 # 마크다운/문서 파일은 Java 코드 검사 제외
 IS_DOC=false
 if echo "$FILE_PATH" | grep -qE "\.(md|txt|yml|yaml|json|sh)$"; then
