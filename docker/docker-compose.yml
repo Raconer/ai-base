@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: aibase
       POSTGRES_PASSWORD: aibase1234
     ports:
-      - "5432:5432"
+      - "5435:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ../database/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -19,6 +19,35 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: ai_base-backend
+    ports:
+      - "8086:8080"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: aibase
+      DB_USERNAME: aibase
+      DB_PASSWORD: aibase1234
+      JWT_SECRET: ai-base-jwt-secret-key-must-be-at-least-512-bits-long-for-hs512-algorithm
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: ai_base-frontend
+    ports:
+      - "3006:3000"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

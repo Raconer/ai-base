@@ -3,7 +3,7 @@ spring:
     name: ai-base
 
   datasource:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:aibase}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5435}/${DB_NAME:aibase}
     username: ${DB_USERNAME:aibase}
     password: ${DB_PASSWORD:aibase1234}
     driver-class-name: org.postgresql.Driver
