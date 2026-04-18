@@ -2,8 +2,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '../lib/api'
 import { useAuthStore } from '../stores/authStore'
-import Card from '../components/ui/Card'
-import Button from '../components/ui/Button'
 import SentimentBadge from '../components/ai/SentimentBadge'
 
 interface PostResponse {
@@ -44,62 +42,70 @@ export default function PostDetail() {
     },
   })
 
-  if (isLoading) return <div className="text-center py-12 text-gray-400">로딩 중...</div>
-  if (!post) return <div className="text-center py-12 text-gray-400">게시글을 찾을 수 없습니다.</div>
+  if (isLoading) return (
+    <div className="flex justify-center py-20">
+      <div className="w-6 h-6 border-2 border-[#4f8ef7] border-t-transparent rounded-full animate-spin" />
+    </div>
+  )
+  if (!post) return (
+    <div className="text-center py-20 text-[#6b7590]">게시글을 찾을 수 없습니다.</div>
+  )
 
   const isOwner = user?.id === post.userId
 
   return (
-    <article className="max-w-3xl mx-auto space-y-6">
-      <Card>
+    <article className="max-w-3xl mx-auto px-4 py-8">
+      <div className="bg-[#1a1f2e] rounded-2xl p-6">
         <header className="mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2 flex-wrap">
               {post.category && (
-                <span className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded">
+                <span className="px-2.5 py-0.5 bg-[#4f8ef7]/10 text-[#4f8ef7] text-xs rounded-full font-medium">
                   {post.category}
                 </span>
               )}
-              <span>👁 {post.viewCount}</span>
-              <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+              <span className="text-xs text-[#6b7590]">👁 {post.viewCount}</span>
+              <span className="text-xs text-[#6b7590]">
+                {new Date(post.createdAt).toLocaleDateString('ko-KR')}
+              </span>
               <SentimentBadge postId={post.id} score={post.sentimentScore} />
             </div>
             {isOwner && (
               <div className="flex gap-2">
-                <Button variant="secondary" size="sm" onClick={() => navigate(`/blog/${id}/edit`)}>
+                <button
+                  onClick={() => navigate(`/blog/${id}/edit`)}
+                  className="px-3 py-1.5 bg-[#252b3b] hover:bg-[#2d3447] text-[#a8b2c8] rounded-lg text-xs font-medium transition-colors"
+                >
                   수정
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  loading={deleteMutation.isPending}
-                  onClick={() => {
-                    if (confirm('삭제하시겠습니까?')) deleteMutation.mutate()
-                  }}
+                </button>
+                <button
+                  disabled={deleteMutation.isPending}
+                  onClick={() => { if (confirm('삭제하시겠습니까?')) deleteMutation.mutate() }}
+                  className="px-3 py-1.5 text-red-400 hover:bg-red-400/10 rounded-lg text-xs font-medium transition-colors disabled:opacity-50"
                 >
                   삭제
-                </Button>
+                </button>
               </div>
             )}
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{post.title}</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">by {post.userName}</p>
+          <h1 className="text-2xl font-bold text-white mb-2">{post.title}</h1>
+          <p className="text-xs text-[#6b7590]">by {post.userName}</p>
         </header>
 
-        <div className="prose dark:prose-invert max-w-none whitespace-pre-wrap text-gray-800 dark:text-gray-200">
+        <div className="text-sm text-[#a8b2c8] leading-relaxed whitespace-pre-wrap">
           {post.content}
         </div>
 
         {post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex flex-wrap gap-1.5 mt-6 pt-6 border-t border-[#2a3042]">
             {post.tags.map((tag) => (
-              <span key={tag} className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">
+              <span key={tag} className="px-2.5 py-0.5 bg-[#4f8ef7]/10 text-[#4f8ef7] text-xs rounded-full font-medium">
                 #{tag}
               </span>
             ))}
           </div>
         )}
-      </Card>
+      </div>
     </article>
   )
 }

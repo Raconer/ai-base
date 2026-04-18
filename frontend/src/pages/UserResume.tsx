@@ -24,47 +24,51 @@ export default function UserResume() {
   const primary = data?.find(r => r.isPrimary) ?? data?.[0]
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4">
-      <Link to={`/${username}`} className="text-sm text-blue-600 hover:underline">
+    <div className="max-w-3xl mx-auto py-8 px-4">
+      <Link to={`/${username}`} className="text-xs text-[#4f8ef7] hover:underline">
         ← @{username}
       </Link>
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mt-2 mb-6">이력서</h1>
+      <h1 className="text-2xl font-bold text-white mt-2 mb-6">이력서</h1>
 
-      {isLoading && <div className="text-center py-12 text-gray-400">불러오는 중...</div>}
+      {isLoading && (
+        <div className="flex justify-center py-12">
+          <div className="w-6 h-6 border-2 border-[#4f8ef7] border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
 
       {(isError || (!isLoading && !primary)) && (
-        <div className="text-center py-12 text-gray-400">
-          <div className="text-4xl mb-2">📄</div>
-          <p>공개된 이력서가 없습니다.</p>
+        <div className="text-center py-16 text-[#6b7590]">
+          <div className="text-4xl mb-3">📄</div>
+          <p className="text-sm">공개된 이력서가 없습니다.</p>
         </div>
       )}
 
       {primary && (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 space-y-6">
+        <div className="bg-[#1a1f2e] rounded-2xl p-6 space-y-5">
           <div>
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white">{primary.title}</h2>
+            <h2 className="text-xl font-bold text-white">{primary.title}</h2>
             {primary.summary && (
-              <p className="text-gray-600 dark:text-gray-300 mt-2">{primary.summary}</p>
+              <p className="text-sm text-[#a8b2c8] mt-2 leading-relaxed">{primary.summary}</p>
             )}
           </div>
 
           {Object.keys(primary.skills).length > 0 && (
             <div>
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">기술 스택</h3>
+              <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">기술 스택</p>
               <div className="flex flex-wrap gap-2">
                 {Object.entries(primary.skills).map(([skill, level]) => (
                   <span
                     key={skill}
-                    className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-sm"
+                    className="px-3 py-1 bg-[#4f8ef7]/10 text-[#4f8ef7] rounded-full text-xs font-medium"
                   >
-                    {skill} {level && <span className="text-blue-400">· {level}</span>}
+                    {skill}{level && <span className="text-[#4f8ef7]/60"> · {level}</span>}
                   </span>
                 ))}
               </div>
             </div>
           )}
 
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[#6b7590] pt-2 border-t border-[#2a3042]">
             최종 수정: {new Date(primary.updatedAt).toLocaleDateString('ko-KR')}
           </p>
         </div>
