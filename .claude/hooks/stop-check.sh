@@ -15,6 +15,7 @@ missing=()
 for file in $changed; do
   classname=$(basename "$file" .java)
   test_exists=$(find "$BACKEND_TEST" -name "${classname}Test.java" 2>/dev/null | head -1)
+
   if [ -z "$test_exists" ]; then
     missing+=("$classname")
   fi
