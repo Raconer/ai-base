@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from 'react'
+import { useEffect, type ReactNode } from 'react'
 
 interface ModalProps {
   open: boolean
@@ -9,25 +9,38 @@ interface ModalProps {
 
 export default function Modal({ open, onClose, title, children }: ModalProps) {
   useEffect(() => {
+    if (!open) return
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     document.addEventListener('keydown', handler)
     return () => document.removeEventListener('keydown', handler)
-  }, [onClose])
+  }, [open, onClose])
 
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#1a1f2e] rounded-2xl shadow-2xl w-full max-w-lg mx-4 p-6 border border-[#2a3042]">
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 500,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 24,
+      }}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="surface"
+        style={{ width: '100%', maxWidth: 560, padding: 32 }}
+      >
         {title && (
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-semibold text-white">{title}</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, borderBottom: '1px solid var(--divider)', paddingBottom: 16 }}>
+            <span className="label">{title}</span>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center text-[#6b7590] hover:text-white hover:bg-[#252b3b] rounded-lg transition-colors"
+              aria-label="모달 닫기"
+              style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--fg-muted)', fontSize: 18 }}
             >
-              ✕
+              ×
             </button>
           </div>
         )}

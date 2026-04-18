@@ -1,0 +1,362 @@
+/* ═══════════════════════════════════════════════════════════════════
+   Editorial Theme — Swiss/Minimalist Design System
+   Reference: Massimo Vignelli, Dieter Rams, Josef Müller-Brockmann
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── CSS Variables ──────────────────────────────────────────────── */
+:root {
+  --bg: #FFFFFF;
+  --fg: #0A0A0A;
+  --fg-muted: #666666;
+  --divider: #E5E5E5;
+  --surface: #FAFAFA;
+
+  --font-sans: "Neue Haas Grotesk Display", "Inter", "Helvetica Neue", -apple-system, sans-serif;
+  --font-mono: ui-monospace, Consolas, monospace;
+
+  --max-width: 1400px;
+  --padding-desktop: 40px;
+  --padding-mobile: 20px;
+  --section-spacing: 120px;
+  --base: 8px;
+}
+
+[data-theme='dark'] {
+  --bg: #0A0A0A;
+  --fg: #F5F5F5;
+  --fg-muted: #888888;
+  --divider: #1F1F1F;
+  --surface: #111111;
+}
+
+/* ── Global Reset ───────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-radius: 0 !important;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  transition: background-color 200ms linear, color 200ms linear;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0em;
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+/* ── Header ─────────────────────────────────────────────────────── */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  z-index: 100;
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--divider);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  padding: 0 var(--padding-desktop);
+}
+
+.header__left  { text-align: left; }
+.header__center { text-align: center; }
+.header__right { text-align: right; }
+
+.header a,
+.header button,
+.header span {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 200ms linear;
+}
+
+.header a:hover,
+.header button:hover {
+  color: var(--fg-muted);
+}
+
+/* ── Hero ───────────────────────────────────────────────────────── */
+.hero-title {
+  font-size: clamp(64px, 10vw, 180px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+/* ── Labels ─────────────────────────────────────────────────────── */
+.label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.label::before { content: "[ "; }
+.label::after  { content: " ]"; }
+
+/* ── Divider ────────────────────────────────────────────────────── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: var(--divider);
+  margin: var(--section-spacing) 0;
+}
+
+/* ── Layout Container ───────────────────────────────────────────── */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--padding-desktop);
+}
+
+/* ── Project Grid ───────────────────────────────────────────────── */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: calc(var(--base) * 4);
+}
+
+.project-item img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(100%);
+  transition: filter 400ms linear, transform 400ms linear;
+}
+
+.project-item:hover img {
+  filter: grayscale(0%);
+  transform: scale(1.02);
+}
+
+.project-item__label {
+  margin-top: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+
+.project-item__label::before { content: "[ "; }
+.project-item__label::after  { content: " ]"; }
+
+/* ── CTA Stack ──────────────────────────────────────────────────── */
+.cta-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.cta-link {
+  font-size: clamp(48px, 8vw, 120px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  display: block;
+  padding: calc(var(--base) * 2) 0;
+  border-top: 1px solid var(--divider);
+  transition: color 200ms linear;
+}
+
+.cta-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  text-decoration-thickness: 1px;
+}
+
+/* ── Scroll Reveal ──────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 600ms linear, transform 600ms linear;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Theme Toggle ───────────────────────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+}
+
+.theme-toggle button {
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg);
+  border: 1px solid var(--divider);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 200ms linear, color 200ms linear;
+  color: var(--fg);
+}
+
+.theme-toggle button:hover {
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+.theme-toggle button svg {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5px;
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid var(--fg);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+  padding: calc(var(--base) * 1.5) calc(var(--base) * 3);
+  transition: background-color 200ms linear, color 200ms linear;
+  text-decoration: none;
+}
+
+.btn:hover {
+  background-color: var(--fg);
+  color: var(--bg);
+}
+
+.btn--ghost {
+  border-color: var(--divider);
+  color: var(--fg-muted);
+}
+
+.btn--ghost:hover {
+  background-color: var(--surface);
+  color: var(--fg);
+}
+
+/* ── Form Elements ──────────────────────────────────────────────── */
+.input {
+  width: 100%;
+  background-color: transparent;
+  border: 1px solid var(--divider);
+  border-radius: 0;
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: calc(var(--base) * 1.5) calc(var(--base) * 2);
+  outline: none;
+  transition: border-color 200ms linear;
+  -webkit-appearance: none;
+}
+
+.input:focus {
+  border-color: var(--fg);
+}
+
+.input::placeholder {
+  color: var(--fg-muted);
+}
+
+/* ── Card / Surface ─────────────────────────────────────────────── */
+.surface {
+  background-color: var(--surface);
+  border: 1px solid var(--divider);
+}
+
+/* ── Typography helpers ─────────────────────────────────────────── */
+.text-muted { color: var(--fg-muted); }
+
+.heading {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--fg);
+  line-height: 0.95;
+}
+
+/* ── Page wrapper (offset for fixed header) ─────────────────────── */
+.page {
+  padding-top: 48px;
+  min-height: 100vh;
+  background-color: var(--bg);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  :root {
+    --section-spacing: 60px;
+    --padding-desktop: 20px;
+  }
+
+  .header {
+    padding: 0 var(--padding-mobile);
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-title {
+    font-size: clamp(48px, 12vw, 96px);
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1024px) {
+  .project-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Reduced Motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .project-item img {
+    transition: none;
+  }
+
+  html {
+    transition: none;
+  }
+}

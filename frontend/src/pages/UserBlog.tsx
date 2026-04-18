@@ -4,13 +4,7 @@ import api from '../lib/api'
 import { useAuthStore } from '../stores/authStore'
 
 interface Post {
-  id: number
-  title: string
-  status: string
-  category: string
-  viewCount: number
-  tags: string[]
-  createdAt: string
+  id: number; title: string; status: string; category: string; viewCount: number; tags: string[]; createdAt: string
 }
 
 export default function UserBlog() {
@@ -23,66 +17,42 @@ export default function UserBlog() {
     queryKey: ['user-posts', username],
     queryFn: () => api.get(`/posts?username=${username}`).then(r => r.data.data),
   })
-
   const posts = data?.content ?? []
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
-      <div className="flex items-center justify-between mb-6">
+    <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: 'calc(var(--section-spacing) / 2) var(--padding-desktop)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', borderBottom: '1px solid var(--divider)', paddingBottom: 24, marginBottom: 40 }}>
         <div>
-          <Link to={`/${username}`} className="text-xs text-[#4f8ef7] hover:underline">
+          <Link to={`/${username}`} style={{ color: 'var(--fg-muted)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 500, textDecoration: 'none' }}>
             ← @{username}
           </Link>
-          <h1 className="text-2xl font-bold text-white mt-1">블로그</h1>
+          <h1 style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em', textTransform: 'uppercase', color: 'var(--fg)', marginTop: 8 }}>Blog</h1>
         </div>
         {isOwner && (
-          <button
-            onClick={() => navigate(`/${username}/blog/new`)}
-            className="px-4 py-2 bg-[#4f8ef7] hover:bg-[#3d7ef6] text-white rounded-xl text-sm font-semibold transition-colors"
-          >
-            + 새 글
-          </button>
+          <button className="btn" onClick={() => navigate(`/${username}/blog/new`)}>+ 새 글</button>
         )}
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center py-12">
-          <div className="w-6 h-6 border-2 border-[#4f8ef7] border-t-transparent rounded-full animate-spin" />
-        </div>
+        <div style={{ padding: '60px 0', textAlign: 'center' }}><span className="label">Loading...</span></div>
       ) : posts.length === 0 ? (
-        <div className="text-center py-16 text-[#6b7590]">
-          <div className="text-4xl mb-3">📝</div>
-          <p className="text-sm">작성된 글이 없습니다.</p>
-        </div>
+        <div style={{ padding: '60px 0', textAlign: 'center' }}><p className="label">작성된 글 없음</p></div>
       ) : (
-        <ul className="space-y-2">
+        <div style={{ borderTop: '1px solid var(--divider)' }}>
           {posts.map(post => (
-            <li key={post.id}>
-              <Link
-                to={`/${username}/blog/${post.id}`}
-                className="block p-5 bg-[#1a1f2e] rounded-xl hover:bg-[#252b3b] transition-colors"
-              >
-                <div className="flex justify-between gap-2 mb-2">
-                  <h2 className="font-semibold text-white text-sm">{post.title}</h2>
-                  <span className="text-xs text-[#6b7590] shrink-0">
-                    {new Date(post.createdAt).toLocaleDateString('ko-KR')}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  {post.category && (
-                    <span className="text-xs text-[#6b7590]">{post.category}</span>
-                  )}
-                  <span className="text-xs text-[#6b7590]">조회 {post.viewCount}</span>
-                  {post.tags.map(tag => (
-                    <span key={tag} className="px-2.5 py-0.5 bg-[#4f8ef7]/10 text-[#4f8ef7] text-xs rounded-full font-medium">
-                      #{tag}
-                    </span>
-                  ))}
-                </div>
-              </Link>
-            </li>
+            <Link
+              key={post.id}
+              to={`/${username}/blog/${post.id}`}
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 0', borderBottom: '1px solid var(--divider)', textDecoration: 'none' }}
+            >
+              <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--fg)' }}>{post.title}</span>
+              <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+                {post.category && <span className="label">{post.category}</span>}
+                <span className="label">{new Date(post.createdAt).toLocaleDateString('ko-KR')}</span>
+              </div>
+            </Link>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   )

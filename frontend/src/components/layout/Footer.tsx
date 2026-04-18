@@ -1,17 +1,16 @@
 export default function Footer() {
+  const year = new Date().getFullYear()
+
   return (
-    <footer className="border-t border-[#2a3042] bg-[#1a1f2e] mt-auto">
-      <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between text-xs text-[#6b7590]">
-        <p>Portfolio — AI Reference Repository</p>
-        <a
-          href="https://github.com/Raconer/ai-base"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hover:text-[#a8b2c8] transition-colors"
-        >
-          GitHub →
-        </a>
-      </div>
+    <footer style={{
+      borderTop: '1px solid var(--divider)',
+      padding: '32px var(--padding-desktop)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    }}>
+      <span className="label">Portfolio — AI Reference Repository</span>
+      <span className="label">{year}</span>
     </footer>
   )
 }

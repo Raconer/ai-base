@@ -2,128 +2,61 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import api from '../lib/api'
-import { useAuthStore } from '../stores/authStore'
-import SemanticSearch from '../components/ai/SemanticSearch'
 
 interface PostSummary {
-  id: number
-  title: string
-  category: string
-  viewCount: number
-  tags: string[]
-  createdAt: string
+  id: number; title: string; category: string; viewCount: number; tags: string[]; createdAt: string; authorUsername: string
 }
 
 export default function Search() {
   const [keyword, setKeyword] = useState('')
   const [submitted, setSubmitted] = useState('')
-  const [mode, setMode] = useState<'keyword' | 'semantic'>('keyword')
-  const { isAuthenticated } = useAuthStore()
 
   const { data, isLoading } = useQuery({
     queryKey: ['search', submitted],
     queryFn: async () => {
-      const res = await api.get<{ data: { content: PostSummary[] } }>(
-        `/posts/search?keyword=${encodeURIComponent(submitted)}`
-      )
+      const res = await api.get<{ data: { content: PostSummary[] } }>(`/posts/search?keyword=${encodeURIComponent(submitted)}`)
       return res.data.data.content
     },
     enabled: submitted.length > 0,
   })
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-6">
+    <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: 'calc(var(--section-spacing) / 2) var(--padding-desktop)' }}>
+      <p className="label" style={{ marginBottom: 8 }}>Search</p>
+      <h1 style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em', textTransform: 'uppercase', color: 'var(--fg)', marginBottom: 40, borderBottom: '1px solid var(--divider)', paddingBottom: 24 }}>
+        검색
+      </h1>
 
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-1">Search</p>
-          <h1 className="text-2xl font-bold text-white">검색</h1>
+      <form onSubmit={e => { e.preventDefault(); setSubmitted(keyword) }} style={{ display: 'flex', gap: 0, marginBottom: 48, borderBottom: '1px solid var(--divider)' }}>
+        <input
+          className="input"
+          placeholder="검색어를 입력하세요"
+          value={keyword}
+          onChange={e => setKeyword(e.target.value)}
+          style={{ flex: 1, border: 'none', borderBottom: 'none', fontSize: 16, padding: '12px 0' }}
+        />
+        <button type="submit" className="btn" style={{ alignSelf: 'center' }}>검색</button>
+      </form>
+
+      {submitted && <p className="label" style={{ marginBottom: 24 }}>"{submitted}" — {data?.length ?? 0}건</p>}
+      {isLoading && <div style={{ textAlign: 'center', padding: '40px 0' }}><span className="label">Loading...</span></div>}
+
+      {data && data.length > 0 && (
+        <div style={{ borderTop: '1px solid var(--divider)' }}>
+          {data.map(post => (
+            <Link
+              key={post.id}
+              to={`/${post.authorUsername}/blog/${post.id}`}
+              style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 0', borderBottom: '1px solid var(--divider)', textDecoration: 'none' }}
+            >
+              <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--fg)' }}>{post.title}</span>
+              <div style={{ display: 'flex', gap: 24 }}>
+                {post.category && <span className="label">{post.category}</span>}
+                <span className="label">{new Date(post.createdAt).toLocaleDateString('ko-KR')}</span>
+              </div>
+            </Link>
+          ))}
         </div>
-        {isAuthenticated() && (
-          <div className="flex gap-1 bg-[#1a1f2e] rounded-xl p-1">
-            <button
-              onClick={() => setMode('keyword')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                mode === 'keyword'
-                  ? 'bg-[#252b3b] text-white'
-                  : 'text-[#6b7590] hover:text-[#a8b2c8]'
-              }`}
-            >
-              키워드
-            </button>
-            <button
-              onClick={() => setMode('semantic')}
-              className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
-                mode === 'semantic'
-                  ? 'bg-[#252b3b] text-white'
-                  : 'text-[#6b7590] hover:text-[#a8b2c8]'
-              }`}
-            >
-              ✨ 시맨틱
-            </button>
-          </div>
-        )}
-      </div>
-
-      {mode === 'semantic' ? (
-        <SemanticSearch />
-      ) : (
-        <>
-          <form
-            onSubmit={(e) => { e.preventDefault(); setSubmitted(keyword) }}
-            className="flex gap-2"
-          >
-            <input
-              placeholder="검색어를 입력하세요"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              className="flex-1 px-4 py-3 bg-[#1a1f2e] border border-[#2a3042] rounded-xl text-sm text-white placeholder-[#6b7590] outline-none focus:border-[#4f8ef7] focus:ring-1 focus:ring-[#4f8ef7]/30 transition-colors"
-            />
-            <button
-              type="submit"
-              className="px-5 py-3 bg-[#4f8ef7] hover:bg-[#3d7ef6] text-white rounded-xl font-semibold text-sm transition-colors"
-            >
-              검색
-            </button>
-          </form>
-
-          {submitted && (
-            <p className="text-xs text-[#6b7590]">
-              "{submitted}" 검색 결과 {data?.length ?? 0}건
-            </p>
-          )}
-
-          {isLoading && (
-            <div className="flex justify-center py-8">
-              <div className="w-6 h-6 border-2 border-[#4f8ef7] border-t-transparent rounded-full animate-spin" />
-            </div>
-          )}
-
-          <div className="space-y-2">
-            {data?.map((post) => (
-              <Link key={post.id} to={`/blog/${post.id}`} className="block">
-                <div className="bg-[#1a1f2e] rounded-xl p-5 hover:bg-[#252b3b] transition-colors">
-                  <div className="flex items-start justify-between gap-3 mb-2">
-                    <h2 className="text-sm font-semibold text-white hover:text-[#4f8ef7] transition-colors">
-                      {post.title}
-                    </h2>
-                    <span className="text-xs text-[#6b7590] shrink-0">
-                      {new Date(post.createdAt).toLocaleDateString('ko-KR')}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    {post.category && (
-                      <span className="px-2.5 py-0.5 bg-[#4f8ef7]/10 text-[#4f8ef7] text-xs rounded-full font-medium">
-                        {post.category}
-                      </span>
-                    )}
-                    <span className="text-xs text-[#6b7590]">👁 {post.viewCount}</span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </>
       )}
     </div>
   )
