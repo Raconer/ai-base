@@ -1,8 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
+import { useTheme } from '../../hooks/useTheme'
 
 export default function Header() {
   const { isAuthenticated, logout, user } = useAuthStore()
+  const { theme, toggleTheme, mounted } = useTheme()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -11,50 +13,41 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-[#1a1f2e] border-b border-[#2a3042] sticky top-0 z-40">
-      <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
-        <Link to="/" className="text-base font-bold text-white tracking-tight">
-          Portfolio
-        </Link>
+    <header className="header">
+      {/* 좌 — 브랜드 */}
+      <div className="header__left">
+        <Link to="/">PORTFOLIO</Link>
+      </div>
 
-        <nav className="flex items-center gap-2 text-sm">
-          <Link
-            to="/search"
-            className="px-3 py-1.5 text-[#a8b2c8] hover:text-white hover:bg-[#252b3b] rounded-lg transition-colors"
+      {/* 중앙 — 현재 섹션 */}
+      <div className="header__center">
+        <span>AI BASE</span>
+      </div>
+
+      {/* 우 — 네비게이션 */}
+      <div className="header__right" style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '24px' }}>
+        <Link to="/search">SEARCH</Link>
+
+        {isAuthenticated() && user ? (
+          <>
+            <Link to={`/${user.username}`}>@{user.username.toUpperCase()}</Link>
+            <Link to="/dashboard">DASHBOARD</Link>
+            <button onClick={handleLogout}>LOGOUT</button>
+          </>
+        ) : (
+          <Link to="/login">LOGIN</Link>
+        )}
+
+        {/* 테마 토글 — mounted 전에는 렌더 안 함 (hydration 불일치 방지) */}
+        {mounted && (
+          <button
+            onClick={toggleTheme}
+            aria-label={theme === 'light' ? '다크 모드로 전환' : '라이트 모드로 전환'}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
           >
-            Search
-          </Link>
-
-          {isAuthenticated() && user ? (
-            <>
-              <Link
-                to={`/${user.username}`}
-                className="px-3 py-1.5 text-[#a8b2c8] hover:text-white hover:bg-[#252b3b] rounded-lg transition-colors"
-              >
-                @{user.username}
-              </Link>
-              <Link
-                to="/dashboard"
-                className="px-3 py-1.5 text-[#a8b2c8] hover:text-white hover:bg-[#252b3b] rounded-lg transition-colors"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="px-3 py-1.5 text-[#6b7590] hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <Link
-              to="/login"
-              className="px-4 py-1.5 bg-[#4f8ef7] hover:bg-[#3d7ef6] text-white rounded-lg font-medium transition-colors"
-            >
-              Login
-            </Link>
-          )}
-        </nav>
+            {theme === 'light' ? '◐' : '◑'}
+          </button>
+        )}
       </div>
     </header>
   )

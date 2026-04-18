@@ -3,74 +3,46 @@ import { useQuery } from '@tanstack/react-query'
 import api from '../lib/api'
 
 interface ResumeData {
-  id: number
-  title: string
-  summary: string
-  skills: Record<string, string>
-  experience: Record<string, unknown>
-  education: Record<string, unknown>
-  isPrimary: boolean
-  updatedAt: string
+  id: number; title: string; summary: string; skills: Record<string, string>; experience: Record<string, unknown>; education: Record<string, unknown>; isPrimary: boolean; updatedAt: string
 }
 
 export default function UserResume() {
   const { username } = useParams<{ username: string }>()
-
   const { data, isLoading, isError } = useQuery<ResumeData[]>({
     queryKey: ['user-resume', username],
     queryFn: () => api.get('/resumes').then(r => r.data.data),
   })
-
   const primary = data?.find(r => r.isPrimary) ?? data?.[0]
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4">
-      <Link to={`/${username}`} className="text-xs text-[#4f8ef7] hover:underline">
+    <div style={{ maxWidth: 'var(--max-width)', margin: '0 auto', padding: 'calc(var(--section-spacing) / 2) var(--padding-desktop)' }}>
+      <Link to={`/${username}`} style={{ color: 'var(--fg-muted)', fontSize: 11, letterSpacing: '0.08em', textTransform: 'uppercase', fontWeight: 500, textDecoration: 'none' }}>
         ← @{username}
       </Link>
-      <h1 className="text-2xl font-bold text-white mt-2 mb-6">이력서</h1>
+      <h1 style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.04em', textTransform: 'uppercase', color: 'var(--fg)', marginTop: 8, marginBottom: 40, borderBottom: '1px solid var(--divider)', paddingBottom: 24 }}>Resume</h1>
 
-      {isLoading && (
-        <div className="flex justify-center py-12">
-          <div className="w-6 h-6 border-2 border-[#4f8ef7] border-t-transparent rounded-full animate-spin" />
-        </div>
-      )}
-
-      {(isError || (!isLoading && !primary)) && (
-        <div className="text-center py-16 text-[#6b7590]">
-          <div className="text-4xl mb-3">📄</div>
-          <p className="text-sm">공개된 이력서가 없습니다.</p>
-        </div>
-      )}
+      {isLoading && <span className="label">Loading...</span>}
+      {(isError || (!isLoading && !primary)) && <p className="label">공개된 이력서 없음</p>}
 
       {primary && (
-        <div className="bg-[#1a1f2e] rounded-2xl p-6 space-y-5">
-          <div>
-            <h2 className="text-xl font-bold text-white">{primary.title}</h2>
-            {primary.summary && (
-              <p className="text-sm text-[#a8b2c8] mt-2 leading-relaxed">{primary.summary}</p>
-            )}
-          </div>
+        <div>
+          <h2 style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--fg)', marginBottom: 16 }}>{primary.title}</h2>
+          {primary.summary && <p style={{ fontSize: 14, color: 'var(--fg-muted)', lineHeight: 1.7, marginBottom: 32 }}>{primary.summary}</p>}
 
           {Object.keys(primary.skills).length > 0 && (
-            <div>
-              <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">기술 스택</p>
-              <div className="flex flex-wrap gap-2">
+            <div style={{ borderTop: '1px solid var(--divider)', paddingTop: 24, marginBottom: 24 }}>
+              <p className="label" style={{ marginBottom: 16 }}>Skills</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0 }}>
                 {Object.entries(primary.skills).map(([skill, level]) => (
-                  <span
-                    key={skill}
-                    className="px-3 py-1 bg-[#4f8ef7]/10 text-[#4f8ef7] rounded-full text-xs font-medium"
-                  >
-                    {skill}{level && <span className="text-[#4f8ef7]/60"> · {level}</span>}
+                  <span key={skill} style={{ padding: '6px 16px 6px 0', fontSize: 13, color: 'var(--fg)', marginRight: 16, borderBottom: '1px solid var(--divider)' }}>
+                    {skill}{level && <span style={{ color: 'var(--fg-muted)' }}> — {level}</span>}
                   </span>
                 ))}
               </div>
             </div>
           )}
 
-          <p className="text-xs text-[#6b7590] pt-2 border-t border-[#2a3042]">
-            최종 수정: {new Date(primary.updatedAt).toLocaleDateString('ko-KR')}
-          </p>
+          <p className="label" style={{ marginTop: 32 }}>최종 수정: {new Date(primary.updatedAt).toLocaleDateString('ko-KR')}</p>
         </div>
       )}
     </div>

@@ -1,18 +1,18 @@
 import { type HTMLAttributes } from 'react'
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  padding?: boolean
   label?: string
 }
 
-export default function Card({ children, padding = true, label, className = '', ...props }: CardProps) {
+export default function Card({ label, children, style, ...props }: CardProps) {
   return (
     <div
-      className={`bg-[#1a1f2e] rounded-2xl ${padding ? 'p-5' : ''} ${className}`}
+      className="surface"
+      style={{ padding: 24, ...style }}
       {...props}
     >
       {label && (
-        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-wider mb-3">{label}</p>
+        <p className="label" style={{ marginBottom: 16, display: 'block' }}>{label}</p>
       )}
       {children}
     </div>
