@@ -10,20 +10,13 @@ export default function About() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-10">
 
-      {/* 프로필 */}
-      <section className="flex items-start gap-5">
-        <div className="w-16 h-16 rounded-full bg-linear-to-br from-[#4f8ef7] to-indigo-500 flex items-center justify-center text-white text-2xl font-bold shrink-0">
-          K
-        </div>
-        <div>
-          <p className="text-xs font-medium text-[#6b7590] uppercase tracking-widest mb-1">About</p>
-          <h1 className="text-3xl font-extrabold text-white mb-2 tracking-tight">김동호</h1>
-          <p className="text-sm text-[#4f8ef7] font-semibold mb-3">Backend Developer · AI Engineer</p>
-          <p className="text-sm text-[#a8b2c8] leading-relaxed">
-            Spring Boot와 React를 기반으로 AI 파이프라인을 구축하는 백엔드 개발자입니다.<br />
-            5개의 실전 프로젝트에서 사용된 AI 기술들을 하나의 풀스택 포트폴리오 앱에 통합한 레퍼런스 저장소를 운영하고 있습니다.
-          </p>
-        </div>
+      {/* 소개 */}
+      <section>
+        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-widest mb-2">About</p>
+        <h1 className="text-3xl font-extrabold text-white mb-4 tracking-tight">AI Base</h1>
+        <p className="text-sm text-[#a8b2c8] leading-relaxed">
+          5개의 실전 프로젝트에서 사용된 AI 기술들을 하나의 풀스택 포트폴리오 앱에 통합한 레퍼런스 저장소입니다.
+        </p>
       </section>
 
       {/* 기술 스택 */}

@@ -32,7 +32,7 @@ export default function Home() {
 
       {/* 히어로 */}
       <section className="py-8">
-        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-widest mb-4">김동호 · Portfolio</p>
+        <p className="text-xs font-medium text-[#6b7590] uppercase tracking-widest mb-4">Portfolio</p>
         <h1 className="text-4xl font-extrabold text-white mb-4 tracking-tight">
           풀스택 AI 포트폴리오 레퍼런스
         </h1>
@@ -45,12 +45,6 @@ export default function Home() {
             className="px-6 py-2.5 bg-[#4f8ef7] hover:bg-[#3d7ef6] text-white rounded-xl font-semibold text-sm transition-colors"
           >
             블로그 보기
-          </Link>
-          <Link
-            to="/kimdongho"
-            className="px-6 py-2.5 bg-[#1a1f2e] hover:bg-[#252b3b] border border-[#2a3042] text-[#a8b2c8] rounded-xl font-semibold text-sm transition-colors"
-          >
-            내 포트폴리오
           </Link>
           <a
             href="https://github.com/Raconer/ai-base"

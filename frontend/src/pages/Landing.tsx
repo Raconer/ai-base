@@ -98,17 +98,6 @@ export default function Landing() {
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-indigo-600 rounded-full blur-3xl opacity-10 translate-y-1/2 -translate-x-1/4" />
 
         <div className="max-w-5xl mx-auto px-6 pt-24 pb-28">
-          {/* 프로필 배지 */}
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-full bg-linear-to-br from-[#4f8ef7] to-indigo-500 flex items-center justify-center text-white font-bold text-lg shrink-0">
-              K
-            </div>
-            <div>
-              <p className="font-semibold text-white text-sm">김동호 · Backend Developer</p>
-              <p className="text-xs text-[#6b7590]">Spring Boot · React · AI Pipeline</p>
-            </div>
-          </div>
-
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1]">
             AI로 만드는<br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-[#4f8ef7] to-indigo-400">
@@ -167,9 +156,6 @@ export default function Landing() {
                 </button>
               </div>
               <p className="text-xs text-[#6b7590]">신용카드 불필요 · 영구 무료</p>
-              <Link to="/kimdongho" className="text-xs text-[#4f8ef7] hover:underline w-fit">
-                예시 포트폴리오 보기 →
-              </Link>
             </div>
           )}
         </div>
