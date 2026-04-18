@@ -1,18 +1,16 @@
 export default function Footer() {
   return (
-    <footer className="border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 mt-auto">
-      <div className="max-w-6xl mx-auto px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-        <p>AI Base — Portfolio + AI Reference Repository</p>
-        <p className="mt-1">
-          <a
-            href="https://github.com/Raconer/ai-base"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-blue-600"
-          >
-            GitHub
-          </a>
-        </p>
+    <footer className="border-t border-[#2a3042] bg-[#1a1f2e] mt-auto">
+      <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between text-xs text-[#6b7590]">
+        <p>김동호 · Portfolio — AI Reference Repository</p>
+        <a
+          href="https://github.com/Raconer/ai-base"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-[#a8b2c8] transition-colors"
+        >
+          GitHub →
+        </a>
       </div>
     </footer>
   )
