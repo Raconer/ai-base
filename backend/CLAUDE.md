@@ -8,7 +8,7 @@ Spring Boot 3.4 + Java 21 기반 REST API 서버.
 - Java 21 / Spring Boot 3.4
 - Spring Data JPA + QueryDSL 5.1
 - Spring Security + JWT (jjwt 0.12.6)
-- PostgreSQL 16 + pgvector + Redis 7
+- PostgreSQL 16 + pgvector
 - PDFBox 3.0 / Springdoc OpenAPI 2.8
 
 ---
@@ -75,7 +75,7 @@ BusinessException.conflict("이미 존재합니다")
 
 ### 의존 서비스 (Docker)
 ```bash
-docker compose -f docker/docker-compose.yml up -d postgres redis
+docker compose -f docker/docker-compose.yml up -d
 ```
 
 ### 빌드 & 실행
